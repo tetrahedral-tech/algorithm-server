@@ -19,18 +19,18 @@ def internal_checker():
 	if not ip_address(request.remote_addr).is_private:
 		return 'Forbidden', 403
 	
-	encoded = request.headers.get('Authorization')
-	if not encoded:
+	jwt_encoded = request.headers.get('Authorization')
+	if not jwt_encoded:
 		return 'Bad Request', 400
 	
  
 	try:
-		decoded = jwt.decode(encoded, os.environ['JWT_SECRET'], algorithms=['HS256'])
+		jwt_decoded = jwt.decode(jwt_encoded, os.environ['JWT_SECRET'], algorithms=['HS256'])
 	except Exception as e:
 		print(e)
 		return 'Unauthorized', 401
 
-	if decoded['event'] != 'auth':
+	if jwt_decoded['event'] != 'auth':
 		return 'Unauthorized', 401
 
 	config = json.load(open('config.json', 'r'))
