@@ -42,8 +42,6 @@ def internal_checker():
     lambda x: algorithm_output(*x),
     zip(algorithms, [prices] * len(algorithms))
   )))
-
   redis_db.hset('data', 'current_data', results)
-
-
+  
   return algorithms
