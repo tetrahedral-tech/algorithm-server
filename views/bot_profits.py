@@ -1,7 +1,7 @@
 import jwt, os
 from flask import request
 
-def profit(bot_id):
+def bot_profit(bot_id):
   jwt_encoded = request.headers.get('Authorization')
   if not jwt_encoded:
     return 'Bad Request', 400 
