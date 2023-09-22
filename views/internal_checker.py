@@ -46,6 +46,7 @@ def internal_checker():
 	signals = { k:v[0] for (k, v) in base.items() }
 	strengths = { k:v[1] for (k, v) in base.items() }
 
+	redis.delete('signals', 'strengths')
 	redis.hset('signals', mapping=signals)
 	redis.hset('strengths', mapping=strengths)
 	
