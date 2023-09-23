@@ -1,23 +1,27 @@
-import jwt, os, io
+import jwt, os, io, utils
 from flask import request
-from utils import get_bot_profit
-from plots.bot_profit import plot
 import matplotlib.pyplot as plt
+from bson.objectid import ObjectId
+from plots.bot_net_worth import plot
 
-def bot_profit(bot_id):
+def get_net_worth(bot_id):
+	bots = utils.client['database']['bots']
+	return bots.find_one({'_id': ObjectId(bot_id)})['worth']
+
+def bot_net_worth(bot_id):
   jwt_encoded = request.headers.get('Authorization')
   if not jwt_encoded:
     return 'Bad Request', 400 
- 
+
   try:
     jwt_decoded = jwt.decode(jwt_encoded, os.environ['JWT_SECRET'], algorithms=['HS256'])
-  except Exception as e:
-    print(e)
+    if jwt_decoded._id != bot_id:
+      raise 'Token Mismatch'
+  except Exception:
     return 'Unauthorized', 401
-  
-  profits = get_bot_profit(bot_id)
-  plot(profits)
-  
+
+  plot(get_net_worth(bot_id))
+
   svg_buffer = io.StringIO()
   plt.savefig(svg_buffer, format='svg')
   svg_plot = svg_buffer.getvalue()
