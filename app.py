@@ -10,6 +10,6 @@ app.wsgi_app = ProxyFix(app.wsgi_app)
 
 app.add_url_rule('/plot/<algorithm>', view_func=plot.plot)
 app.add_url_rule('/internal_checker', view_func=internal_checker.internal_checker)
-app.add_url_rule('/profit/<bot_id>',  view_func=bot_profits.bot_profit)
+app.add_url_rule('/profit/<bot_id>',  view_func=bot_profit.bot_profit)
 
 app.run()
