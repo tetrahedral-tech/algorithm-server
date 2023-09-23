@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
-from views import internal_checker, plot, bot_profits
+from views import internal_checker, plot, bot_profit
 
 load_dotenv()
 
