@@ -9,6 +9,8 @@ jobs:
   build:
     name: YAPF Formatter
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: checkout repo
