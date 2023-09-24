@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from algorithms.macd import algorithm as macd
+import colors
 
 def plot(prices):
 	macd_line, signal_line = macd(prices)
@@ -9,10 +10,10 @@ def plot(prices):
 	upper_condition = macd_line > signal_line
 	lower_condition = macd_line < signal_line
 
-	plt.scatter(indicies[upper_condition], signal_line[upper_condition], color='darkturquoise')
-	plt.scatter(indicies[lower_condition], signal_line[lower_condition], color='lightcoral')
+	plt.scatter(indicies[upper_condition], signal_line[upper_condition], color=colors.lower())
+	plt.scatter(indicies[lower_condition], signal_line[lower_condition], color=colors.upper())
 
-	plt.plot(signal_line, color='plum')
-	plt.plot(macd_line, color='mediumpurple')
+	plt.plot(signal_line, color=colors.mainline())
+	plt.plot(macd_line, color=colors.secondaryline())
 
 	return plt
