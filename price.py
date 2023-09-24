@@ -8,4 +8,4 @@ def get_prices(pair, interval=15):
 	current = float(list(ticker['result'].values())[0]['c'][0])
 	prices = [float(point[4]) for point in list(ohlc['result'].values())[0]]
 
-	return np.array([ current, *prices ])
+	return np.array([current, *prices])
