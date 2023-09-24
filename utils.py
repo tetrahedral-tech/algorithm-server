@@ -9,8 +9,4 @@ client = MongoClient(os.environ['DB_URI'], server_api=ServerApi('1'))
 algorithms = client['database']['algorithms']
 
 def get_algorithms():
-	return [
-		algorithm['name']
-		for algorithm
-		in algorithms.find({ 'owner': { '$not': { '$type': 'object' } } })
-	]
+	return [algorithm['name'] for algorithm in algorithms.find({'owner': {'$not': {'$type': 'object'}}})]
