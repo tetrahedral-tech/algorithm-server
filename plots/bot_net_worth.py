@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import colors
+import plots.colors as colors
 
 def plot(bot_profit):
 	bot_profit = np.array(bot_profit)
