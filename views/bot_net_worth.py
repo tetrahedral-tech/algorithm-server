@@ -14,8 +14,7 @@ def bot_net_worth(bot_id):
 		return 'Bad Request', 400
 
 	try:
-		jwt_decoded = jwt.decode(
-		    jwt_encoded, os.environ['JWT_SECRET'], algorithms=['HS256'])
+		jwt_decoded = jwt.decode(jwt_encoded, os.environ['JWT_SECRET'], algorithms=['HS256'])
 		if jwt_decoded._id != bot_id:
 			raise 'Token Mismatch'
 	except Exception:
