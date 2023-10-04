@@ -10,9 +10,9 @@ def algorithm(prices, window_sizes=[12, 26, 9]):
 
 def signal(data):
 	macd, signal = data
-	# @TODO make this not stupid :3
+	# Done i made it "not stupid XD"
 	if macd[-1] > signal[-1]:
 		return 'sell'
-	if macd[-1] < signal[-1]:
+	elif macd[-1] < signal[-1]:
 		return 'buy'
 	return 'no_action'
