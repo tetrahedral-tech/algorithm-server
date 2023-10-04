@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from algorithms.rsi import algorithm as rsi
-import colors
+import plots.colors as colors
 
 def plot(prices):
 	rsi_data = rsi(prices)

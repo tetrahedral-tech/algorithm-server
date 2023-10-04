@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from algorithms.macd import algorithm as macd
-import colors
+import plots.colors as colors
 
 def plot(prices):
 	macd_line, signal_line = macd(prices)
