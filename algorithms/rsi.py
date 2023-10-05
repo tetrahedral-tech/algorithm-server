@@ -20,6 +20,6 @@ def signal(data):
 	rsi = data
 	if rsi[-1] > 70:
 		return 'sell'
-	if rsi[-1] < 30:
+	elif rsi[-1] < 30:
 		return 'buy'
 	return 'no_action'
