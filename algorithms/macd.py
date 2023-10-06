@@ -6,6 +6,7 @@ def algorithm(prices, window_sizes=[12, 26, 9]):
 
 def signal(data):
 	macd, signal = data
+	# Done i made it "not stupid XD"
 	if macd[-1] > signal[-1]:
 		return 'sell'
 	elif macd[-1] < signal[-1]:
