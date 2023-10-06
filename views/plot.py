@@ -6,7 +6,7 @@ from importlib import import_module
 def plot(algorithm):
 	prices = get_prices('ETH/USD', interval=1440)
 
-	if algorithm not in ['bollinger_bands', 'macd', 'rsi']:
+	if algorithm not in ['bollinger_bands', 'rsi']:
 		return 'Invalid Algorithm', 404
 	import_module(f'plots.{algorithm}').plot(prices)
 
