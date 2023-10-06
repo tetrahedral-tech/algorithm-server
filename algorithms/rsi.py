@@ -1,19 +1,7 @@
-import numpy as np
-from numpy.lib.stride_tricks import sliding_window_view
+from talib import RSI
 
 def algorithm(prices, window_size=14):
-	diff = np.diff(prices, 1)
-
-	gains = np.zeros(diff.shape)
-	losses = np.zeros(diff.shape)
-
-	gains[diff > 0] = diff[diff > 0]
-	losses[diff < 0] = diff[diff < 0]
-
-	avg_gains = sliding_window_view(gains, window_size).mean(axis=-1)
-	avg_losses = np.abs(sliding_window_view(losses, window_size).mean(axis=-1))
-
-	rsi = 100 * avg_gains / (avg_gains + avg_losses)
+	rsi = RSI(prices, window_size)
 	return rsi
 
 def signal(data):
