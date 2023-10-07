@@ -1,13 +1,12 @@
 from talib import RSI
 
 def algorithm(prices, window_size=14):
-	rsi = RSI(prices, window_size)
-	return rsi
+	return RSI(prices, window_size)
 
-def signal(data):
+def signal(prices, data, high=70, low=30):
 	rsi = data
-	if rsi[-1] > 70:
+	if rsi[-1] > high:
 		return 'sell'
-	elif rsi[-1] < 30:
+	elif rsi[-1] < low:
 		return 'buy'
 	return 'no_action'
