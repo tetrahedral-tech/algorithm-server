@@ -1,14 +1,7 @@
-from numpy.lib.stride_tricks import sliding_window_view
+from talib import BBANDS
 
 def algorithm(prices, window_size=20, standard_deviations=2):
-	windowed_prices = sliding_window_view(prices, window_size)
-
-	middle_band = windowed_prices.mean(axis=-1)
-	std_dev = windowed_prices.std(axis=-1) * standard_deviations
-
-	upper_band = middle_band + std_dev
-	lower_band = middle_band - std_dev
-
+	upper_band, middle_band, lower_band = BBANDS(prices, window_size, standard_deviations, standard_deviations, 0)
 	return upper_band, lower_band, middle_band
 
 def signal(data):
