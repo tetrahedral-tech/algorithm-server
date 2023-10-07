@@ -10,7 +10,7 @@ redis = Redis(host='localhost', port=6379)
 
 def algorithm_output(algorithm, prices):
 	module = import_module(f'algorithms.{algorithm}')
-	signal = module.signal(module.algorithm(prices))
+	signal = module.signal(prices, module.algorithm(prices))
 
 	# @TODO strength
 	return algorithm, (signal, 0.5)
