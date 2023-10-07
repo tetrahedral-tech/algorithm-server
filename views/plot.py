@@ -14,7 +14,7 @@ def plot(algorithm):
 	svg_buffer = io.StringIO()
 	plt.savefig(svg_buffer, format='svg')
 	svg_plot = svg_buffer.getvalue()
-	plt.close() # Solved plots overwriting each other 
-	svg_buffer.close() 
- 
+	plt.close()  # Solved plots overwriting each other
+	svg_buffer.close()
+
 	return svg_plot
