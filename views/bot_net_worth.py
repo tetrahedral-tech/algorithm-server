@@ -7,7 +7,7 @@ from plots.bot_net_worth import plot
 def get_net_worth(bot_id):
 	bots = utils.client['database']['bots']
 	bot_worth = bots.find_one({'_id': ObjectId(bot_id)})['worth']
-	
+
 	return [worth['value'] for worth in bot_worth]
 
 def bot_net_worth(bot_id):
