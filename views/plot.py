@@ -1,16 +1,17 @@
 import io
+import matplotlib
 import matplotlib.pyplot as plt
+import plots.colors as colors
+from utils import get_algorithms
 from price import get_prices
 from importlib import import_module
-import plots.colors as colors
-import matplotlib
 
 matplotlib.use('Agg')
 
 def plot(algorithm):
 	prices = get_prices('ETH/USD', interval=1440)
 
-	if algorithm not in ['bollinger_bands', 'rsi', 'price']:
+	if algorithm not in get_algorithms():
 		return 'Invalid Algorithm', 404
 	import_module(f'plots.{algorithm}').plot(prices)
 
