@@ -2,11 +2,12 @@ import io
 import matplotlib.pyplot as plt
 from price import get_prices
 from importlib import import_module
+from utils import get_algorithms
 
 def plot(algorithm):
 	prices = get_prices('ETH/USD', interval=1440)
 
-	if algorithm not in ['bollinger_bands', 'rsi']:
+	if algorithm not in get_algorithms():
 		return 'Invalid Algorithm', 404
 	import_module(f'plots.{algorithm}').plot(prices)
 
