@@ -13,7 +13,7 @@ def algorithm_output(algorithm, prices):
 	signal = module.signal(prices, module.algorithm(prices))
 
 	# @TODO strength
-	return algorithm, (signal, 0.5)
+	return algorithm, signal
 
 def internal_checker():
 	if not ip_address(request.remote_addr).is_private:
