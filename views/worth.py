@@ -1,8 +1,10 @@
 import jwt, os, io, utils
-from flask import Response, request
 import matplotlib.pyplot as plt
+import numpy as np
+from flask import Response, request
 from bson.objectid import ObjectId
 from plots.worth import plot
+
 
 bots = utils.client['database']['bots']
 
@@ -19,7 +21,13 @@ def worth(bot_id):
 	except Exception:
 		return 'Unauthorized', 401
 
-	plot([worth['value'] for worth in bot['worth']])
+	timestamps, values = np.transpose([
+		[worth['timestamp'] / 1000, worth['value']] for
+		worth in
+		bot['worth']
+	])
+
+	plot(timestamps, values)
 
 	buffer = io.BytesIO()
 	plt.savefig(buffer, format='svg')
