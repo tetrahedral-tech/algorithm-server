@@ -5,7 +5,6 @@ from flask import Response, request
 from bson.objectid import ObjectId
 from plots.worth import plot
 
-
 bots = utils.client['database']['bots']
 
 def worth(bot_id):
@@ -21,11 +20,7 @@ def worth(bot_id):
 	except Exception:
 		return 'Unauthorized', 401
 
-	timestamps, values = np.transpose([
-		[worth['timestamp'] / 1000, worth['value']] for
-		worth in
-		bot['worth']
-	])
+	timestamps, values = np.transpose([[worth['timestamp'] / 1000, worth['value']] for worth in bot['worth']])
 
 	plot(timestamps, values)
 
