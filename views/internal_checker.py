@@ -34,6 +34,7 @@ def internal_checker():
 
 	config = json.load(open('config.json', 'r'))
 	prices = get_prices(config['pair'], interval=1440)
+
 	# Convert list of algorithms into {name: signal}
 	algorithms = get_algorithms()
 
