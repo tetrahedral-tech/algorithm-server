@@ -4,6 +4,8 @@ import numpy as np
 from flask import Response, request
 from bson.objectid import ObjectId
 from plots.worth import plot
+import plots.colors as colors
+
 
 bots = utils.client['database']['bots']
 
@@ -24,8 +26,13 @@ def worth(bot_id):
 
 	plot(timestamps, values)
 
+	ax = plt.gca()
+	ax.tick_params(color=colors.outline(), labelcolor=colors.outline())
+	for spine in ax.spines.values():
+		spine.set_edgecolor(colors.outline())
+
 	buffer = io.BytesIO()
-	plt.savefig(buffer, format='svg')
+	plt.savefig(buffer, format='svg', transparent=True)
 	value = buffer.getvalue()
 	buffer.close()
 
