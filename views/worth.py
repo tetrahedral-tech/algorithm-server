@@ -6,7 +6,6 @@ from bson.objectid import ObjectId
 from plots.worth import plot
 import plots.colors as colors
 
-
 bots = utils.client['database']['bots']
 
 def worth(bot_id):
