@@ -5,7 +5,9 @@ from flask import Response, request
 from bson.objectid import ObjectId
 from plots.worth import plot
 import plots.colors as colors
+import matplotlib
 
+matplotlib.use('Agg')
 bots = utils.client['database']['bots']
 
 def worth(bot_id):
@@ -21,9 +23,11 @@ def worth(bot_id):
 	except Exception:
 		return 'Unauthorized', 401
 
-	timestamps, values = np.transpose([[worth['timestamp'] / 1000, worth['value']] for worth in bot['worth']])
-
-	plot(timestamps, values)
+	if len(bot['worth']) == 0:
+		plot([], [])
+	else:
+		timestamps, values = np.transpose([[worth['timestamp'] / 1000, worth['value']] for worth in bot['worth']])
+		plot(timestamps, values)
 
 	ax = plt.gca()
 	ax.tick_params(color=colors.outline(), labelcolor=colors.outline())
@@ -33,6 +37,7 @@ def worth(bot_id):
 	buffer = io.BytesIO()
 	plt.savefig(buffer, format='svg', transparent=True)
 	value = buffer.getvalue()
+	plt.close()
 	buffer.close()
 
 	return Response(value, mimetype='image/svg+xml')
