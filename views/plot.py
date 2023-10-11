@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 from price import get_prices
 from importlib import import_module
 import plots.colors as colors
+import matplotlib
+
+matplotlib.use('Agg')
 
 def plot(algorithm):
 	prices = get_prices('ETH/USD', interval=1440)
