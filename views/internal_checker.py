@@ -1,12 +1,12 @@
 import jwt, json, os
-from redis import Redis
+from redis import from_url
 from price import get_prices
 from ipaddress import ip_address
 from flask import request
 from importlib import import_module
 from utils import get_algorithms
 
-redis = Redis(host='localhost', port=6379)
+redis = from_url(os.environ['REDIS_URI'])
 
 def algorithm_output(algorithm, prices):
 	module = import_module(f'algorithms.{algorithm}')
