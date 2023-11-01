@@ -5,6 +5,7 @@ import plots.colors as colors
 from utils import get_algorithms
 from price import get_prices
 from importlib import import_module
+from utils import get_algorithms
 
 matplotlib.use('Agg')
 
