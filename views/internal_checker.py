@@ -1,19 +1,19 @@
 import jwt, json, os
-from redis import Redis
+from redis import from_url
 from price import get_prices
 from ipaddress import ip_address
 from flask import request
 from importlib import import_module
 from utils import get_algorithms
 
-redis = Redis(host='localhost', port=6379)
+redis = from_url(os.environ['REDIS_URI'])
 
 def algorithm_output(algorithm, prices):
 	module = import_module(f'algorithms.{algorithm}')
 	signal = module.signal(prices, module.algorithm(prices))
 
 	# @TODO strength
-	return algorithm, (signal, 0.5)
+	return algorithm, signal
 
 def internal_checker():
 	if not ip_address(request.remote_addr).is_private:
@@ -34,6 +34,7 @@ def internal_checker():
 
 	config = json.load(open('config.json', 'r'))
 	prices = get_prices(config['pair'], interval=1440)
+
 	# Convert list of algorithms into {name: signal}
 	algorithms = get_algorithms()
 
