@@ -5,7 +5,7 @@ def algorithm(prices, window_size=20, standard_deviations=2):
 	return upper_band, lower_band, middle_band
 
 def signal(prices, data):
-	upper_band, lower_band, middle_band = data
+	upper_band, lower_band, middle_band, prices = data
 	if prices[-1] > upper_band[-1]:
 		return 'sell', 1
 	elif prices[-1] < lower_band[-1]:
