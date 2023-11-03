@@ -6,7 +6,7 @@ def algorithm(prices, window_size=14):
 def signal(prices, data, high=70, low=30):
 	rsi = data
 	if rsi[-1] > high:
-		return 'sell', 0.5
+		return 'sell'
 	elif rsi[-1] < low:
-		return 'buy', 0.5
-	return 'no_action', 0
+		return 'buy'
+	return 'no_action'
