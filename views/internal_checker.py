@@ -10,10 +10,9 @@ redis = from_url(os.environ['REDIS_URI'])
 
 def algorithm_output(algorithm, prices):
 	module = import_module(f'algorithms.{algorithm}')
-	signal = module.signal(prices, module.algorithm(prices))
+	signal, strength = module.signal(prices, module.algorithm(prices))
 
-	# @TODO strength
-	return algorithm, signal
+	return algorithm, (signal, strength)
 
 def internal_checker():
 	if not ip_address(request.remote_addr).is_private:
