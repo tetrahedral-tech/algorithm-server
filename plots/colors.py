@@ -12,6 +12,3 @@ def lower():
 
 def inner():
 	return 'grey'
-
-def outline():
-	return '#888888'
