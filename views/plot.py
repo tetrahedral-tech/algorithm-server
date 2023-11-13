@@ -1,4 +1,4 @@
-import io
+import json, io
 import matplotlib
 import matplotlib.pyplot as plt
 import plots.colors as colors
@@ -10,7 +10,8 @@ from utils import get_algorithms
 matplotlib.use('Agg')
 
 def plot(algorithm):
-	prices = get_prices('ETH/USD', interval=1440)
+	config = json.load(open('config.json', 'r'))
+	prices = get_prices(address=config['address'] if 'address' in config else None)
 
 	if algorithm not in get_algorithms():
 		return 'Invalid Algorithm', 404
