@@ -32,7 +32,7 @@ def internal_checker():
 		return 'Unauthorized', 401
 
 	config = json.load(open('config.json', 'r'))
-	prices = get_prices(address=config['address'] if 'address' in config else None)
+	prices = get_prices(config['pair'], interval=1440)
 
 	# Convert list of algorithms into {name: signal}
 	algorithms = get_algorithms()
