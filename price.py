@@ -1,25 +1,11 @@
 import numpy as np
-from requests import post
+from requests import get
 
-def get_prices(address=None, duration='YEAR'):
-	query = {
-	  'operationName':
-	    'TokenPrice',
-	  'variables': {
-	    'chain': 'ETHEREUM',
-	    'duration': duration
-	  },
-	  'query':
-	    'query TokenPrice($chain: Chain!, $address: String = null, $duration: HistoryDuration!) {\n  token(chain: $chain, address: $address) {\n    market(currency: USD) {\n      price {\n        value\n      }\n      priceHistory(duration: $duration) {\n        value\n      }\n    }\n  }\n}'
-	}
+def get_prices(pair, interval=15):
+	ohlc = get(f'https://api.kraken.com/0/public/OHLC?pair={pair}&interval={interval}').json()
+	ticker = get(f'https://api.kraken.com/0/public/Ticker?pair={pair}').json()
 
-	if address:
-		query['variables']['address'] = address
-
-	prices = post('https://api.uniswap.org/v1/graphql', json=query, headers={'Origin': 'http://localhost:80'}).json()
-	prices = prices['data']['token']['market']
-
-	current = float(prices['price']['value'])
-	prices = [float(point['value']) for point in prices['priceHistory']]
+	current = float(list(ticker['result'].values())[0]['c'][0])
+	prices = [float(point[4]) for point in list(ohlc['result'].values())[0]]
 
 	return np.array([*prices, current])
