@@ -22,4 +22,4 @@ def get_prices(address=None, duration='YEAR'):
 	current = float(prices['price']['value'])
 	prices = [float(point['value']) for point in prices['priceHistory']]
 
-	return np.array([current, *prices])
+	return np.array([*prices, current])
