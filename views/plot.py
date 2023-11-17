@@ -17,10 +17,13 @@ def plot(algorithm):
 		return 'Invalid Algorithm', 404
 	import_module(f'plots.{algorithm}').plot(prices)
 
-	ax = plt.gca()
-	ax.tick_params(color=colors.outline(), labelcolor=colors.outline())
-	for spine in ax.spines.values():
-		spine.set_edgecolor(colors.outline())
+	axes = plt.gcf().get_axes()
+	for axis in axes:
+		axis.tick_params(color=colors.outline(), labelcolor=colors.outline())
+		for spine in axis.spines.values():
+			spine.set_edgecolor(colors.outline())
+
+	plt.tight_layout()
 
 	# Save plot into buffer instead of the FS
 	svg_buffer = io.StringIO()
