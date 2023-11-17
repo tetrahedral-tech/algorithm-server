@@ -13,7 +13,7 @@ def plot(algorithm):
 	config = json.load(open('config.json', 'r'))
 	prices = get_prices(config['pair'], interval=1440)
 
-	if algorithm not in get_algorithms():
+	if algorithm not in ['price', *get_algorithms()]:
 		return 'Invalid Algorithm', 404
 	import_module(f'plots.{algorithm}').plot(prices)
 
