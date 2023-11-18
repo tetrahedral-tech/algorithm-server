@@ -7,7 +7,7 @@ from plots.bollinger_bands import plot as bollinger_bands
 import plots.colors as colors
 
 def plot(prices):
-	gs = GridSpec(2, 2, figure=plt.gcf())
+	gs = GridSpec(3, 1, figure=plt.gcf())
 
 	plt.subplot(gs[0, :])
 	indicies = np.arange(0, prices.shape[0])
@@ -22,9 +22,9 @@ def plot(prices):
 	plt.scatter(indicies[upper_condition], sliced_prices[upper_condition], color=colors.upper())
 	plt.scatter(indicies[lower_condition], sliced_prices[lower_condition], color=colors.lower())
 
-	plt.subplot(gs[-1, :1])
+	plt.subplot(gs[-1, :])
 	rsi(prices)
-	plt.subplot(gs[-1, 1:2])
+	plt.subplot(gs[-2, :])
 	bollinger_bands(prices)
 
 	return plt
