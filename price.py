@@ -1,11 +1,14 @@
 import numpy as np
 from requests import get
 
-def get_prices(pair, interval=15):
-	ohlc = get(f'https://api.kraken.com/0/public/OHLC?pair={pair}&interval={interval}').json()
-	ticker = get(f'https://api.kraken.com/0/public/Ticker?pair={pair}').json()
+# {60 300 900  3600   21600  86400}
+#  1m 5m  15m  1h     6h     1d
+#  5h 25h 3d3h 12d12h 2mo15d 10mo
+def get_prices(pair, interval=21600):
+	ohlc = get(f'https://api.exchange.coinbase.com/products/{pair}/candles?granularity={interval}').json()
+	ticker = get(f'https://api.exchange.coinbase.com/products/{pair}/ticker').json()
 
-	current = float(list(ticker['result'].values())[0]['c'][0])
-	prices = [float(point[4]) for point in list(ohlc['result'].values())[0]]
+	current = float(ticker['price'])
+	prices = [point[4] for point in ohlc]
 
-	return np.array([*prices, current])
+	return np.flip([current, *prices])
