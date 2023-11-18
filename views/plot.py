@@ -11,7 +11,7 @@ matplotlib.use('Agg')
 
 def plot(algorithm):
 	config = json.load(open('config.json', 'r'))
-	prices = get_prices(config['pair'], interval=1440)
+	prices = get_prices(config['pair'], interval=config['interval'])
 
 	if algorithm not in ['price', *get_algorithms()]:
 		return 'Invalid Algorithm', 404

@@ -1,3 +1,4 @@
 {
-	"pair": "ETH/USD"
+	"pair": "ETH-USD",
+	"interval": 21600
 }
