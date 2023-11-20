@@ -1,17 +1,16 @@
-import io, json
+import io
 import matplotlib
 import matplotlib.pyplot as plt
 import plots.colors as colors
 from utils import get_algorithms
-from price import get_prices
+from price import get_cached_prices
 from importlib import import_module
 from utils import get_algorithms
 
 matplotlib.use('Agg')
 
 def plot(algorithm):
-	config = json.load(open('config.json', 'r'))
-	prices = get_prices(config['pair'], interval=config['interval'])
+	prices = get_cached_prices()
 
 	if algorithm not in ['price', *get_algorithms()]:
 		return 'Invalid Algorithm', 404

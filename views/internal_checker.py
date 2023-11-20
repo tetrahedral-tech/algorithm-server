@@ -1,4 +1,4 @@
-import jwt, json, os
+import jwt, os
 from redis import from_url
 from price import get_prices
 from ipaddress import ip_address
@@ -31,8 +31,7 @@ def internal_checker():
 	if jwt_decoded['event'] != 'auth':
 		return 'Unauthorized', 401
 
-	config = json.load(open('config.json', 'r'))
-	prices = get_prices(config['pair'], interval=config['interval'])
+	prices = get_prices()
 
 	# Convert list of algorithms into {name: signal}
 	algorithms = get_algorithms()

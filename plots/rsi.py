@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from algorithms.rsi import algorithm as rsi
 import plots.colors as colors
 
-def plot(prices):
-	rsi_line = rsi(prices)
+def plot(prices, **kwargs):
+	rsi_line = rsi(prices, **kwargs)
 	indicies = np.arange(0, rsi_line.shape[0])
 
 	plt.plot(indicies, rsi_line, color=colors.mainline())
