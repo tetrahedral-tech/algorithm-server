@@ -1,19 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import plots.colors as colors
 from matplotlib.gridspec import GridSpec
 from algorithms.custom_bollinger_rsi import algorithm as custom_bollinger_rsi
 from plots.rsi import plot as rsi
 from plots.bollinger_bands import plot as bollinger_bands
-import plots.colors as colors
 
-def plot(prices):
+def plot(prices, **kwargs):
 	gs = GridSpec(3, 1, figure=plt.gcf())
 
 	plt.subplot(gs[0, :])
 	indicies = np.arange(0, prices.shape[0])
 	plt.plot(indicies, prices, color=colors.mainline())
 
-	upper_band, lower_band, middle_band, rsi_line = custom_bollinger_rsi(prices)
+	upper_band, lower_band, middle_band, rsi_line = custom_bollinger_rsi(prices, **kwargs)
 	sliced_prices = prices[:min(upper_band.shape[0], rsi_line.shape[0])]
 	indicies = np.arange(0, indicies.shape[0])
 

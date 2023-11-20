@@ -1,9 +1,9 @@
 from .bollinger_bands import algorithm as bollinger_bands
 from .rsi import algorithm as rsi
 
-def algorithm(prices, rsi_window=13, bollinger_window=30):
-	upper_band, lower_band, middle_band = bollinger_bands(prices, window_size=bollinger_window)
-	rsi_line = rsi(prices, window_size=rsi_window)
+def algorithm(prices, window_size_rsi=13, window_size_bollinger_bands=30):
+	upper_band, lower_band, middle_band = bollinger_bands(prices, window_size=window_size_bollinger_bands)
+	rsi_line = rsi(prices, window_size=window_size_rsi)
 
 	return upper_band, lower_band, middle_band, rsi_line
 

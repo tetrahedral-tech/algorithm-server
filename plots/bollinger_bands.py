@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from algorithms.bollinger_bands import algorithm as boillinger_bands
 import plots.colors as colors
 
-def plot(prices):
-	upper_band, lower_band, middle_band = boillinger_bands(prices)
+def plot(prices, **kwargs):
+	upper_band, lower_band, middle_band = boillinger_bands(prices, **kwargs)
 
 	indicies = np.arange(0, upper_band.shape[0])
 	sliced_prices = prices[:upper_band.shape[0]]
