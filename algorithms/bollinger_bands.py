@@ -1,6 +1,7 @@
 from talib import BBANDS
+from price import get_periods
 
-def algorithm(prices, window_size=20, standard_deviations=2):
+def algorithm(prices, window_size=get_periods(20, 'days'), standard_deviations=2):
 	upper_band, middle_band, lower_band = BBANDS(prices, window_size, standard_deviations, standard_deviations, 0)
 	return upper_band, lower_band, middle_band
 

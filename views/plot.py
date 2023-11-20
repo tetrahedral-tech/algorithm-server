@@ -2,15 +2,20 @@ import io
 import matplotlib
 import matplotlib.pyplot as plt
 import plots.colors as colors
+from flask import request
+from importlib import import_module
 from utils import get_algorithms
 from price import get_cached_prices
-from importlib import import_module
 from utils import get_algorithms
 
 matplotlib.use('Agg')
 
 def plot(algorithm):
-	prices = get_cached_prices()
+	interval = request.args.get('interval')
+	if interval:
+		prices = get_cached_prices(interval=interval)
+	else:
+		prices = get_cached_prices()
 
 	if algorithm not in ['price', *get_algorithms()]:
 		return 'Invalid Algorithm', 404

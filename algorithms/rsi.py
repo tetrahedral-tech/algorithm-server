@@ -1,6 +1,7 @@
 from talib import RSI
+from price import get_periods
 
-def algorithm(prices, window_size=14):
+def algorithm(prices, window_size=get_periods(14, 'days')):
 	return RSI(prices, window_size)
 
 def signal(prices, data, high=70, low=30):
