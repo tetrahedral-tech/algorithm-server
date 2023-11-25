@@ -1,5 +1,6 @@
 import os
 import numpy as np
+from math import ceil
 from requests import get
 from redis import from_url
 from dotenv import load_dotenv
@@ -15,6 +16,14 @@ point_count = 720
 default_interval = 240
 cached_intervals = [30, 60, 240, 1440]
 supported_intervals = [1, 5, 15, 30, 60, 240, 1440, 10080]
+
+def is_supported_interval(interval):
+	global supported_intervals
+	return interval in supported_intervals
+
+def is_cached_interval(interval):
+	global cached_intervals
+	return interval in cached_intervals
 
 def is_supported_interval(interval):
 	global supported_intervals
