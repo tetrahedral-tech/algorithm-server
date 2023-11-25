@@ -1,20 +1,19 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from algorithms.rsi import algorithm as rsi
 import plots.colors as colors
+from algorithms.rsi import algorithm as rsi
 
-def plot(prices, **kwargs):
+def plot(prices, timestamps, **kwargs):
 	rsi_line = rsi(prices, **kwargs)
-	indicies = np.arange(0, rsi_line.shape[0])
 
-	plt.plot(indicies, rsi_line, color=colors.mainline())
+	plt.plot(timestamps, rsi_line, color=colors.mainline())
 
 	# Thresholds
 	upper = np.full(rsi_line.shape, 70)
 	lower = np.full(rsi_line.shape, 30)
 
-	plt.fill_between(indicies, upper, lower, color='grey', alpha=0.3)
-	plt.plot(indicies, upper, linestyle='dashed', color=colors.upper())
-	plt.plot(indicies, lower, linestyle='dashed', color=colors.lower())
+	plt.fill_between(timestamps, upper, lower, color='grey', alpha=0.3)
+	plt.plot(timestamps, upper, linestyle='dashed', color=colors.upper())
+	plt.plot(timestamps, lower, linestyle='dashed', color=colors.lower())
 
 	return plt
