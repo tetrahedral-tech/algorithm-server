@@ -1,12 +1,11 @@
 import matplotlib.pyplot as plt
 import plots.colors as colors
-import datetime as dt
 import numpy as np
+from datetime import datetime as dt
 
-def plot(timestamps, values):
+def plot(values, timestamps):
 	values = np.array(values)
-	# times = [ dt.datetime.fromtimestamp(timestamp) for timestamp in timestamps ]
-	times = np.arange(0, values.shape[0]) * 5
-	plt.plot(times, values, color=colors.upper())
+	timestamps = [dt.fromtimestamp(timestamp) for timestamp in timestamps]
+	plt.plot(timestamps, values, color=colors.upper())
 
 	return plt

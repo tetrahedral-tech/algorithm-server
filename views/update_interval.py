@@ -27,4 +27,4 @@ def update_interval():
 	except Exception as error:
 		return str(error), 400
 
-	return new_interval
+	return str(new_interval)
