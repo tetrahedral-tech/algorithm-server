@@ -27,7 +27,7 @@ def worth(bot_id):
 		plot([], [])
 	else:
 		timestamps, values = np.transpose([[worth['timestamp'] / 1000, worth['value']] for worth in bot['worth']])
-		plot(timestamps, values)
+		plot(values, timestamps)
 
 	ax = plt.gca()
 	ax.tick_params(color=colors.outline(), labelcolor=colors.outline())

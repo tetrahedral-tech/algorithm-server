@@ -1,9 +1,11 @@
 import schedule, os, time
 import numpy as np
+from math import ceil
 from requests import get
 from redis import from_url
 from dotenv import load_dotenv
 from threading import Thread
+from flask import has_request_context, request
 
 load_dotenv()
 redis = from_url(os.environ['REDIS_URI'])
@@ -12,34 +14,64 @@ redis = from_url(os.environ['REDIS_URI'])
 #  1m 5m  15m  1h     6h     1d
 #  5h 25h 3d3h 12d12h 2mo15d 10mo
 
+point_count = 300
 default_interval = 21600
-cached_intervals = [60, 300, 3600, 21600]
+cached_intervals = [300, 900, 3600, 21600]
 supported_intervals = [60, 300, 900, 3600, 21600, 86400]
+
+def is_supported_interval(interval):
+	global supported_intervals
+	return interval in supported_intervals
+
+def is_cached_interval(interval):
+	global cached_intervals
+	return interval in cached_intervals
 
 def set_default_interval(interval):
 	global default_interval
-	if interval not in supported_intervals:
+	if not is_supported_interval(interval):
 		raise Exception('Unsupported Interval')
 
 	default_interval = interval
 	return default_interval
 
 def get_default_interval():
+	if has_request_context():
+		interval = request.args.get('interval')
+		if interval and is_supported_interval(int(interval)):
+			return int(interval)
 	return default_interval
 
-def get_prices(pair='ETH-USD', interval=default_interval):
+def get_prices(pair='ETH-USD', interval='default'):
+	if interval == 'default':
+		interval = get_default_interval()
+
 	ohlc = get(f'https://api.exchange.coinbase.com/products/{pair}/candles?granularity={interval}').json()
-	ticker = get(f'https://api.exchange.coinbase.com/products/{pair}/ticker').json()
 
-	current = float(ticker['price'])
 	prices = [point[4] for point in ohlc]
+	timestamps = [point[0] for point in ohlc]
 
-	return np.flip([current, *prices])
+	return np.flip(prices), np.flip(timestamps)
 
-def get_cached_prices(interval=21600):
-	return np.array([float(point) for point in redis.lrange(f'prices:{interval}', 0, -1)])
+def get_cached_prices(interval='default'):
+	if interval == 'default':
+		interval = get_default_interval()
 
-def get_periods(period_size, period_type, interval=default_interval):
+	if not is_cached_interval(interval):
+		raise Exception('Uncached Interval')
+
+	prices = redis.lrange(f'prices:{interval}', 0, -1)
+	timestamps = redis.lrange(f'timestamps:{interval}', 0, -1)
+
+	if len(prices) < 1:
+		return np.zeros(point_count), np.zeros(point_count)
+
+	return np.array(prices).astype(float), np.array(timestamps).astype(float)
+
+def get_periods(period_size, period_type, interval='default'):
+	if interval == 'default':
+		interval = get_default_interval()
+
 	if 'month' in period_type:
 		period_multiplier = 30 * 24 * 60 * 60
 	elif 'week' in period_type:
@@ -54,20 +86,24 @@ def get_periods(period_size, period_type, interval=default_interval):
 		period_multiplier = 1
 	period_seconds = period_size * period_multiplier
 
-	return period_seconds / interval
+	return max(ceil(period_seconds / interval), 2)
 
 # Price Caching
 def cache_prices():
 	for interval in cached_intervals:
 		print(f'Caching prices for {interval}')
-		prices = get_prices(interval=interval)
-		redis.delete(f'prices:{interval}')
-		redis.lpush(f'prices:{interval}', *prices)
+		prices, timestamps = get_prices(interval=interval)
 
-schedule.every(1).minutes.do(cache_prices)
-schedule.run_all()
+		redis.delete(f'prices:{interval}')
+		redis.lpush(f'prices:{interval}', *prices.tolist())
+
+		redis.delete(f'timestamps:{interval}')
+		redis.lpush(f'timestamps:{interval}', *timestamps.tolist())
+
+schedule.every(3).minutes.do(cache_prices)
 
 def job_loop():
+	schedule.run_all()
 	while True:
 		schedule.run_pending()
 		time.sleep(1)
