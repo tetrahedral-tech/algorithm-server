@@ -1,10 +1,13 @@
 from talib import BBANDS
-from price import get_periods
+from price import get_periods, get_max_periods
 
 def algorithm(prices, window_size=(20, 'days'), standard_deviations=2):
-	print(prices.shape[0])
-	print(get_periods(*window_size))
-	return BBANDS(prices, timeperiod=get_periods(*window_size), nbdevup=standard_deviations, nbdevdn=standard_deviations)
+	periods = get_periods(*window_size)
+
+	if get_max_periods() < periods:
+		raise Exception(f'Not Enough Datapoints for this Interval')
+
+	return BBANDS(prices, timeperiod=periods, nbdevup=standard_deviations, nbdevdn=standard_deviations)
 
 def signal(prices, data):
 	upper_band, middle_band, lower_band = data
