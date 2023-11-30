@@ -13,9 +13,7 @@ redis = from_url(os.environ['REDIS_URI'])
 #  1   5     15    30   60   240 1440 10080 21600
 #  12h 2d12h 1w12h 2w1d 1mo 4mo 2y  14y    30y
 
-base_point_count = 720
-pre_fetch_price_count = 1
-point_count = base_point_count * (pre_fetch_price_count + 1)
+point_count = 720
 default_interval = 240
 cached_intervals = [30, 60, 240, 1440]
 supported_intervals = [1, 5, 15, 30, 60, 240, 1440, 10080]
@@ -98,52 +96,23 @@ def get_max_periods(interval='default'):
 	if interval == 'default':
 		interval = get_default_interval()
 
-	return ceil(base_point_count * interval)
+	return ceil(point_count * interval)
 
 # Price Caching
 def update_cached_prices():
 	for interval in cached_intervals:
 		print(f'Caching prices for {interval}')
-		cached_prices, cached_timestamps = get_cached_prices(interval)
 		prices, timestamps = get_prices(interval=interval)
 
-		mask = np.isin(timestamps, cached_timestamps)
-		prices = prices[mask]
-		timestamps = timestamps[mask]
-
+		redis.delete(f'prices:{interval}')
+		redis.delete(f'timestamps:{interval}')
 		redis.rpush(f'prices:{interval}', *prices.tolist())
 		redis.rpush(f'timestamps:{interval}', *timestamps.tolist())
 
-def initial_cache():
-	global point_count
-
-	for interval in cached_intervals:
-		redis.delete(f'prices:{interval}')
-		redis.delete(f'timestamps:{interval}')
-
-		full_prices, full_timestamps = get_prices(interval=interval)
-		initial_base_timestamp = full_timestamps[0]
-
-		for i in range(1, pre_fetch_price_count + 1):
-			print(f'Caching {interval}.{i} (Initial)')
-			base_timestamp = initial_base_timestamp - (interval * base_point_count * i)
-
-			prices, timestamps = get_prices(interval=interval, base_timestamp=base_timestamp)
-
-			mask = np.isin(timestamps, full_timestamps)
-			prices = prices[mask]
-			timestamps = timestamps[mask]
-
-			full_prices = np.concatenate((full_prices, prices))
-			full_timestamps = np.concatenate((full_timestamps, timestamps))
-
-		redis.lpush(f'prices:{interval}', *full_prices.tolist())
-		redis.lpush(f'timestamps:{interval}', *full_timestamps.tolist())
-
-initial_cache()
 schedule.every(3).minutes.do(update_cached_prices)
 
 def job_loop():
+	schedule.run_all()
 	while True:
 		schedule.run_pending()
 		time.sleep(1)
