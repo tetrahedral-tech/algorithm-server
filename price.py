@@ -67,11 +67,12 @@ def get_cached_prices(interval='default'):
 
 	prices = redis.lrange(f'prices:{interval}', 0, -1)
 	timestamps = redis.lrange(f'timestamps:{interval}', 0, -1)
+	last_complete_point = redis.get(f'last_complete_point:{interval}')
 
 	if len(prices) < 1:
 		return np.zeros(point_count), np.zeros(point_count)
 
-	return np.array(prices).astype(float), np.array(timestamps).astype(float)
+	return np.array(prices).astype(float), np.array(timestamps).astype(float), float(last_complete_point)
 
 def get_periods(period_size, period_type, interval='default'):
 	if interval == 'default':
@@ -105,5 +106,6 @@ def update_cached_prices():
 
 		redis.delete(f'prices:{interval}')
 		redis.delete(f'timestamps:{interval}')
+		redis.set(f'last_complete_point:{interval}', last_complete_point)
 		redis.rpush(f'prices:{interval}', *prices.tolist())
 		redis.rpush(f'timestamps:{interval}', *timestamps.tolist())
