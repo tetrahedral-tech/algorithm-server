@@ -18,11 +18,11 @@ def plot(algorithm):
 	interval = int(request.args.get('interval'))
 
 	if interval and is_cached_interval(interval):
-		prices, timestamps = get_cached_prices(interval=interval)
+		prices, timestamps, _ = get_cached_prices(interval=interval)
 	elif interval and is_supported_interval(interval):
-		prices, timestamps = get_prices(interval=interval)
+		prices, timestamps, _ = get_prices(interval=interval)
 	elif not interval:
-		prices, timestamps = get_cached_prices()
+		prices, timestamps, _ = get_cached_prices()
 	else:
 		return 'Unsupported Interval', 400
 

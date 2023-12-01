@@ -1,17 +1,16 @@
-import schedule, os, time
+import os
 import numpy as np
 from math import ceil
 from requests import get
 from redis import from_url
 from dotenv import load_dotenv
-from threading import Thread
 from flask import has_request_context, request
 
 load_dotenv()
 redis = from_url(os.environ['REDIS_URI'])
 
-#  1   5     15    30   60   240 1440 10080 21600
-#  12h 2d12h 1w12h 2w1d 1mo 4mo 2y  14y    30y
+#  1   5     15    30   60  240  1440 10080 21600
+#  12h 2d12h 1w12h 2w1d 1mo 4mo  2y   14y   30y
 
 point_count = 720
 default_interval = 240
@@ -41,23 +40,23 @@ def get_default_interval():
 			return int(interval)
 	return default_interval
 
-def get_prices(pair='ETH/USD', interval='default', base_timestamp=None):
+def get_prices(pair='ETH/USD', interval='default'):
 	if interval == 'default':
 		interval = get_default_interval()
-	if base_timestamp:
-		base_timestamp = int(base_timestamp)
 
-	ohlc = get(
-	  f'https://api.kraken.com/0/public/OHLC?pair={pair}&interval={interval}{f"&since={base_timestamp}" if base_timestamp else ""}'
-	).json()
+	ohlc = get(f'https://api.kraken.com/0/public/OHLC?pair={pair}&interval={interval}').json()
 
 	if 'result' not in ohlc:
 		raise Exception(ohlc['error'][0])
 
-	timestamps = [point[0] for point in list(ohlc['result'].values())[0]]
-	prices = [float(point[4]) for point in list(ohlc['result'].values())[0]]
+	results = list(ohlc['result'].values())[0]
 
-	return np.array(prices).astype(float), np.array(timestamps).astype(float)
+	# [:-1] to trim off the uncomplete datapoint
+	timestamps = [point[0] for point in results][:-1]
+	prices = [float(point[4]) for point in results][:-1]
+	last_complete_point = ohlc['result']['last']
+
+	return np.array(prices).astype(float), np.array(timestamps).astype(float), last_complete_point
 
 def get_cached_prices(interval='default'):
 	if interval == 'default':
@@ -102,20 +101,9 @@ def get_max_periods(interval='default'):
 def update_cached_prices():
 	for interval in cached_intervals:
 		print(f'Caching prices for {interval}')
-		prices, timestamps = get_prices(interval=interval)
+		prices, timestamps, last_complete_point = get_prices(interval=interval)
 
 		redis.delete(f'prices:{interval}')
 		redis.delete(f'timestamps:{interval}')
 		redis.rpush(f'prices:{interval}', *prices.tolist())
 		redis.rpush(f'timestamps:{interval}', *timestamps.tolist())
-
-schedule.every(3).minutes.do(update_cached_prices)
-
-def job_loop():
-	schedule.run_all()
-	while True:
-		schedule.run_pending()
-		time.sleep(1)
-
-thread = Thread(target=job_loop, daemon=True)
-thread.start()

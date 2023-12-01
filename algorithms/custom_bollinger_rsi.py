@@ -16,3 +16,5 @@ def signal(prices, data):
 
 	if price >= upper_band[-1] and rsi_line[-1] >= 70:
 		return 'sell', 1
+
+	return 'no_action', 0
