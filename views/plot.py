@@ -35,7 +35,7 @@ def plot(algorithm):
 	timestamps = np.arange(timestamps[-1] - interval_timedelta * timestamps.shape[0], timestamps[-1], interval_timedelta)
 
 	try:
-		import_module(f'plots.{algorithm}').plot(prices, timestamps)
+		import_module(f'algorithms.{algorithm}').plot(prices, timestamps)
 	except Exception as error:
 		return str(error), 400
 
