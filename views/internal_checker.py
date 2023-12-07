@@ -1,10 +1,10 @@
-import jwt, os
+import os
 from redis import from_url
 from price import get_prices
 from ipaddress import ip_address
-from flask import request, jsonify
+from flask import request
 from importlib import import_module
-from utils import get_algorithms
+from utils import authorize_server, get_algorithms
 
 redis = from_url(os.environ['REDIS_URI'])
 last_checked_point = 0
@@ -20,16 +20,9 @@ def internal_checker():
 	if not ip_address(request.remote_addr).is_private:
 		return 'Forbidden', 403
 
-	jwt_encoded = request.headers.get('Authorization')
-	if not jwt_encoded:
-		return 'Bad Request', 400
-
 	try:
-		jwt_decoded = jwt.decode(jwt_encoded, os.environ['JWT_SECRET'], algorithms=['HS256'])
+		authorize_server(request.headers.get('Authorization'))
 	except Exception:
-		return 'Unauthorized', 401
-
-	if jwt_decoded['event'] != 'auth':
 		return 'Unauthorized', 401
 
 	prices, timestamps, last_complete_point = get_prices()
@@ -51,4 +44,4 @@ def internal_checker():
 		redis.hset('signals', mapping=signals)
 		redis.hset('strengths', mapping=strengths)
 
-	return jsonify({'algorithms': algorithms, 'new_datapoint': new_datapoint})
+	return {'algorithms': algorithms, 'new_datapoint': new_datapoint}
