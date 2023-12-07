@@ -3,7 +3,6 @@ from price import get_periods, get_max_periods
 import matplotlib.pyplot as plt
 import plots.colors as colors
 
-
 def algorithm(prices, window_size=(20, 'days'), standard_deviations=2):
 	periods = get_periods(*window_size)
 

@@ -6,7 +6,6 @@ from matplotlib.gridspec import GridSpec
 from algorithms.rsi import plot as rsi_plot
 from algorithms.bollinger_bands import plot as bollinger_bands_plot
 
-
 def algorithm(prices, window_size_rsi=(13, 'days'), window_size_bollinger_bands=(1, 'month')):
 	bb_data = bollinger_bands(prices, window_size=window_size_bollinger_bands)
 	rsi_line = rsi(prices, window_size=window_size_rsi)
