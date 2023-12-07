@@ -2,6 +2,7 @@ import schedule, time
 from threading import Thread
 from dotenv import load_dotenv
 from flask import Flask
+from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 from price import update_cached_prices
 from views import internal_checker, plot, worth, interval, update_interval
@@ -10,6 +11,7 @@ load_dotenv()
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app)
+CORS(app)
 
 app.add_url_rule('/plot/<algorithm>', view_func=plot.plot)
 app.add_url_rule('/worth/<bot_id>', view_func=worth.worth)
