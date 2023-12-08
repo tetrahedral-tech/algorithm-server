@@ -1,15 +1,9 @@
 from talib import BBANDS
-from price import get_periods, get_max_periods
 import matplotlib.pyplot as plt
 import plots.colors as colors
 
-def algorithm(prices, window_size=(20, 'days'), standard_deviations=2):
-	periods = get_periods(*window_size)
-
-	if get_max_periods() < periods:
-		raise Exception(f'Not Enough Datapoints for this Interval')
-
-	return BBANDS(prices, timeperiod=periods, nbdevup=standard_deviations, nbdevdn=standard_deviations)
+def algorithm(prices, window_size=20, standard_deviations=2):
+	return BBANDS(prices, timeperiod=window_size, nbdevup=standard_deviations, nbdevdn=standard_deviations)
 
 def signal(prices, data):
 	upper_band, middle_band, lower_band = data
@@ -22,7 +16,7 @@ def signal(prices, data):
 	return 'no_action', 0
 
 def plot(prices, timestamps, **kwargs):
-	upper_band, middle_band, lower_band = algorithm(prices, window_size=(20, 'days'), **kwargs)
+	upper_band, middle_band, lower_band = algorithm(prices, **kwargs)
 
 	plt.fill_between(timestamps, upper_band, lower_band, color='grey', alpha=0.3)
 
