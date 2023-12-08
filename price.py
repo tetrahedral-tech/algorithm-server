@@ -74,30 +74,6 @@ def get_cached_prices(interval='default'):
 
 	return np.array(prices).astype(float), np.array(timestamps).astype(float), float(last_complete_point)
 
-def get_periods(period_size, period_type, interval='default'):
-	if interval == 'default':
-		interval = get_default_interval()
-
-	if 'month' in period_type:
-		period_multiplier = 30 * 24 * 60
-	elif 'week' in period_type:
-		period_multiplier = 7 * 24 * 60
-	elif 'day' in period_type:
-		period_multiplier = 24 * 60
-	elif 'hour' in period_type:
-		period_multiplier = 60
-	elif 'minute' in period_type:
-		period_multiplier = 1
-	period_seconds = period_size * period_multiplier
-
-	return ceil(period_seconds / interval)
-
-def get_max_periods(interval='default'):
-	if interval == 'default':
-		interval = get_default_interval()
-
-	return ceil(point_count * interval)
-
 # Price Caching
 def update_cached_prices():
 	for interval in cached_intervals:

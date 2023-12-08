@@ -6,7 +6,7 @@ from matplotlib.gridspec import GridSpec
 from algorithms.rsi import plot as rsi_plot
 from algorithms.bollinger_bands import plot as bollinger_bands_plot
 
-def algorithm(prices, window_size_rsi=(13, 'days'), window_size_bollinger_bands=(1, 'month')):
+def algorithm(prices, window_size_rsi=13, window_size_bollinger_bands=30):
 	bb_data = bollinger_bands(prices, window_size=window_size_bollinger_bands)
 	rsi_line = rsi(prices, window_size=window_size_rsi)
 
@@ -16,7 +16,7 @@ def signal(prices, data):
 	price = prices[-1]
 	upper_band, lower_band, middle_band, rsi_line = data
 
-	if price >= lower_band[-1] and 30 >= rsi_line[-1]:
+	if lower_band[-1] >= price and 30 >= rsi_line[-1]:
 		return 'buy', 0.5
 
 	if price >= upper_band[-1] and rsi_line[-1] >= 70:
@@ -34,7 +34,7 @@ def plot(prices, timestamps, **kwargs):
 	sliced_prices = prices[:min(upper_band.shape[0], rsi_line.shape[0])]
 
 	upper_condition = (prices >= upper_band) & (rsi_line >= 70)
-	lower_condition = (prices >= lower_band) & (30 >= rsi_line)
+	lower_condition = (lower_band >= prices) & (30 >= rsi_line)
 	plt.scatter(timestamps[upper_condition], sliced_prices[upper_condition], color=colors.upper())
 	plt.scatter(timestamps[lower_condition], sliced_prices[lower_condition], color=colors.lower())
 

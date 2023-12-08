@@ -1,16 +1,10 @@
 from talib import RSI
-from price import get_periods, get_max_periods
 import numpy as np
 import matplotlib.pyplot as plt
 import plots.colors as colors
 
-def algorithm(prices, window_size=(14, 'days')):
-	periods = get_periods(*window_size)
-
-	if get_max_periods() < periods:
-		raise Exception(f'Not Enough Datapoints for this Interval')
-
-	return RSI(prices, timeperiod=get_periods(*window_size))
+def algorithm(prices, window_size=14):
+	return RSI(prices, timeperiod=window_size)
 
 def signal(prices, data, high=70, low=30):
 	rsi = data
