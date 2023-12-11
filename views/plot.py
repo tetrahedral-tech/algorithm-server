@@ -15,8 +15,8 @@ figure_size = mpl.rcParams['figure.figsize']
 figure_size[0] = figure_size[0] * 1.5
 
 def plot(algorithm):
-	interval = int(request.args.get('interval'))
-	interactive = bool(request.args.get('interactive'))
+	interval = int(request.args.get('interval') or 0)
+	interactive = bool(request.args.get('interactive') or False)
 
 	if interval and price.is_cached_interval(interval):
 		prices, timestamps, _ = price.get_cached_prices(interval=interval)
