@@ -111,6 +111,7 @@ dependencies:
       - flask-cors==4.0.0
       - hiredis==2.2.3
       - idna==3.6
+      - mpld3==0.5.9
       - pyjwt==2.8.0
       - pymongo==4.6.0
       - python-dotenv==1.0.0
