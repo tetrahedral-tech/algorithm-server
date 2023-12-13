@@ -69,9 +69,9 @@ def get_cached_prices(interval='default'):
 	last_complete_point = redis.get(f'last_complete_point:{interval}')
 
 	if len(prices) < 1:
-		return np.zeros(point_count), np.zeros(point_count)
+		return np.zeros(point_count), np.zeros(point_count), 0
 
-	return np.array(prices).astype(float), np.array(timestamps).astype(float), float(last_complete_point)
+	return np.array(prices).astype(float), np.array(timestamps).astype(float), int(last_complete_point)
 
 # Price Caching
 def update_cached_prices():

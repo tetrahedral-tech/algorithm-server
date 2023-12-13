@@ -26,9 +26,8 @@ def internal_checker():
 		return 'Unauthorized', 401
 
 	prices, timestamps, last_complete_point = get_prices()
-	new_datapoint = False
-	if last_complete_point > last_checked_point:
-		new_datapoint = True
+	new_datapoint = last_complete_point > last_checked_point
+	if new_datapoint:
 		last_checked_point = last_complete_point
 
 	# Convert list of algorithms into {name: signal}
