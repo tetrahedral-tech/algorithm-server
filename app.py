@@ -24,14 +24,17 @@ def job_loop():
 		schedule.run_pending()
 		time.sleep(1)
 
-if __name__ == '__main__':
+def start_price_cache():
 	schedule.every(2.5).minutes.do(update_cached_prices)
 	schedule.run_all()
 
 	thread = Thread(target=job_loop, daemon=True)
 	thread.start()
 
+if __name__ == '__main__':
+	start_price_cache()
 	app.run()
 
 def get_app():
+	start_price_cache()
 	return app
