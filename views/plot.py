@@ -49,13 +49,6 @@ def plot(algorithm):
 		axis.tick_params(color=colors.outline(), labelcolor=colors.outline())
 		for spine in axis.spines.values():
 			spine.set_edgecolor(colors.outline())
-			if interval <= 3600:
-				xfmt = md.DateFormatter('%d')
-			elif interval <= 21600:
-				xfmt = md.DateFormatter('%m/%d')
-			else:
-				xfmt = md.DateFormatter('%m')
-			axis.xaxis.set_major_formatter(xfmt)
 
 		if interval >= 10080:
 			xfmt = md.DateFormatter('%Y')
