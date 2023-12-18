@@ -21,8 +21,8 @@ def plot(prices, timestamps, **kwargs):
 	plt.fill_between(timestamps, upper_band, lower_band, color='grey', alpha=0.3)
 
 	# Price/SMA
-	plt.plot(timestamps, prices, color=colors.mainline())
-	plt.plot(timestamps, middle_band, color=colors.secondaryline())
+	plt.plot(timestamps, prices, color=colors.primary())
+	plt.plot(timestamps, middle_band, color=colors.secondary())
 
 	# Buy/Sell Signals
 	upper_condition = prices >= upper_band

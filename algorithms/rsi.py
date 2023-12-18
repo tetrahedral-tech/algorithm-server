@@ -22,7 +22,7 @@ def signal(prices, data, high=70, low=30):
 def plot(prices, timestamps, **kwargs):
 	rsi_line = algorithm(prices, **kwargs)
 
-	plt.plot(timestamps, rsi_line, color=colors.mainline())
+	plt.plot(timestamps, rsi_line, color=colors.primary())
 
 	# Thresholds
 	upper = np.full(rsi_line.shape, 70)
