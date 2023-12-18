@@ -1,20 +1,44 @@
-from talib import MACD
+from talib import MACD, EMA
+import numpy as np
 import matplotlib.pyplot as plt
 import plots.colors as colors
 
 def algorithm(prices, fastperiod=12, slowperiod=26, signalperiod=9):
-	return MACD(prices, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod) #macd, macdsignal, macdhist
+	return MACD(prices, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)
 
 def signal(prices, data):
-	macd, signal, hist = data
-	if macd[-1] == signal[-1]:
-		return 'no_action', 0
+	macd, signal, histogram = data
+	positive_histogram = np.abs(histogram)
+	histogram_max = np.max(np.nan_to_num(positive_histogram))
 
-	elif macd[-2] == signal[-2]:
-		if macd[-1] > signal[-1]:
-			return 'buy', 0.5
-		elif signal[-1] > macd[-1]:
-			return 'sell', 1
+	if macd[-1] > signal[-1] and macd[-2] < signal[-2]:
+		return 'buy', positive_histogram[-1] / histogram_max
+	elif macd[-1] < signal[-1] and macd[-2] > signal[-2]:
+		return 'sell', positive_histogram[-1] / histogram_max
 
-	else:
-		return 'no_action', 0
+	return 'no_action', 0
+
+def plot(prices, timestamps, **kwargs):
+	macd, signal, histogram = algorithm(prices, **kwargs)
+
+	upper_condition = np.insert((macd[1:] > signal[1:]) & (macd[:-1] < signal[:-1]), 0, False)
+	lower_condition = np.insert((macd[1:] < signal[1:]) & (macd[:-1] > signal[:-1]), 0, False)
+
+	plt.subplot(211)
+	plt.plot(timestamps, prices, color=colors.primary())
+	plt.plot(timestamps, EMA(prices, timeperiod=12), color=colors.secondary())
+	plt.plot(timestamps, EMA(prices, timeperiod=26), color=colors.tertiary())
+
+	plt.scatter(timestamps[upper_condition], prices[upper_condition], color=colors.upper())
+	plt.scatter(timestamps[lower_condition], prices[lower_condition], color=colors.lower())
+
+	plt.subplot(212)
+	plt.plot(timestamps, macd, color=colors.primary())
+	plt.plot(timestamps, signal, color=colors.secondary())
+
+	plt.bar(timestamps[histogram >= 0], histogram[histogram >= 0], color=colors.uppersecondary())
+	plt.bar(timestamps[histogram < 0], histogram[histogram < 0], color=colors.lowersecondary())
+	plt.plot(timestamps, np.zeros(prices.shape[0]), color=colors.inner(), linestyle='-')
+
+	plt.scatter(timestamps[upper_condition], signal[upper_condition], color=colors.upper())
+	plt.scatter(timestamps[lower_condition], signal[lower_condition], color=colors.lower())
