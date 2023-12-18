@@ -28,7 +28,7 @@ def plot(prices, timestamps, **kwargs):
 	gs = GridSpec(3, 1, figure=plt.gcf())
 
 	plt.subplot(gs[0, :])
-	plt.plot(timestamps, prices, color=colors.mainline())
+	plt.plot(timestamps, prices, color=colors.primary())
 
 	upper_band, middle_band, lower_band, rsi_line = algorithm(prices, **kwargs)
 	sliced_prices = prices[:min(upper_band.shape[0], rsi_line.shape[0])]
