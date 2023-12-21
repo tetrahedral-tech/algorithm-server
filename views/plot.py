@@ -1,13 +1,13 @@
-import io, price
-import matplotlib as mpl
 import matplotlib.pyplot as plt
-import matplotlib.dates as md
-import numpy as np
 import plots.colors as colors
-from mpld3 import fig_to_html
-from flask import request
+import matplotlib.dates as md
+import matplotlib as mpl
+import numpy as np
+import io, price
 from importlib import import_module
 from utils import get_algorithms
+from mpld3 import fig_to_html
+from flask import request
 
 mpl.use('Agg')
 
