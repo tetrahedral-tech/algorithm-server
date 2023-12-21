@@ -1,6 +1,6 @@
-from talib import BBANDS
 import matplotlib.pyplot as plt
 import plots.colors as colors
+from talib import BBANDS
 
 def algorithm(prices, window_size=20, standard_deviations=2):
 	return BBANDS(prices, timeperiod=window_size, nbdevup=standard_deviations, nbdevdn=standard_deviations)
