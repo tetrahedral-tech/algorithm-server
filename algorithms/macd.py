@@ -1,7 +1,7 @@
-from talib import MACD, EMA
-import numpy as np
 import matplotlib.pyplot as plt
 import plots.colors as colors
+import numpy as np
+from talib import MACD, EMA
 
 def algorithm(prices, fastperiod=12, slowperiod=26, signalperiod=9):
 	return MACD(prices, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)
