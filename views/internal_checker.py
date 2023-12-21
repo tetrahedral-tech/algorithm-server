@@ -1,8 +1,8 @@
 import os
+from flask import request
 from redis import from_url
 from price import get_prices
 from ipaddress import ip_address
-from flask import request
 from importlib import import_module
 from utils import authorize_server, get_algorithms
 

@@ -1,8 +1,8 @@
 import jwt, os
 from flask import request
 from ipaddress import ip_address
-from price import set_default_interval
 from utils import authorize_server
+from price import set_default_interval
 
 def update_interval():
 	if not ip_address(request.remote_addr).is_private:
