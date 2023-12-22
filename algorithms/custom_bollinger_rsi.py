@@ -17,7 +17,7 @@ def signal(prices, data):
 	upper_band, lower_band, middle_band, rsi_line = data
 
 	if lower_band[-1] >= price and 30 >= rsi_line[-1]:
-		return 'buy', 0.5
+		return 'buy', 1
 
 	if price >= upper_band[-1] and rsi_line[-1] >= 70:
 		return 'sell', 1
