@@ -47,7 +47,7 @@ def get_default_interval():
 		if interval and is_supported_interval(int(interval)):
 			return int(interval)
 	return default_interval
-
+#maybe add proxies?
 def get_prices(pair='ETH/USD', interval='default'):
 	if interval == 'default':
 		interval = get_default_interval()
