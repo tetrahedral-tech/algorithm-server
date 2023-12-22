@@ -3,11 +3,18 @@ import plots.colors as colors
 import matplotlib.dates as md
 import matplotlib as mpl
 import numpy as np
-import io, price
+import io
 from importlib import import_module
 from utils import get_algorithms
 from mpld3 import fig_to_html
 from flask import request
+from price import get_prices, get_default_interval, get_cached_prices, is_cached_interval, is_supported_interval
+
+
+def algorithm_output(algorithm, prices):
+	module = import_module(f'algorithms.{algorithm}')
+	signal, strength = module.signal(prices, module.algorithm(prices))
+	return signal, strength
 
 mpl.use('Agg')
 
@@ -15,16 +22,17 @@ figure_size = mpl.rcParams['figure.figsize']
 figure_size[0] = figure_size[0] * 1.5
 
 def plot(algorithm):
-	default_interval = price.get_default_interval()
+	default_interval = get_default_interval()
 	interval = int(request.args.get('interval') or default_interval)
 	interactive = bool(request.args.get('interactive') or False)
+	backtest = bool(request.args.get('backtest') or False)
 
-	if interval and price.is_cached_interval(interval):
-		prices, timestamps, _ = price.get_cached_prices(interval=interval)
-	elif interval and price.is_supported_interval(interval):
-		prices, timestamps, _ = price.get_prices(interval=interval)
+	if interval and is_cached_interval(interval):
+		prices, timestamps, _ = get_cached_prices(interval=interval)
+	elif interval and is_supported_interval(interval):
+		prices, timestamps, _ = get_prices(interval=interval)
 	elif not interval:
-		prices, timestamps, _ = price.get_cached_prices()
+		prices, timestamps, _ = get_cached_prices()
 	else:
 		return 'Unsupported Interval', 400
 
@@ -68,6 +76,38 @@ def plot(algorithm):
 	if interactive:
 		# @TODO change d3 and mpld3 urls to local ones
 		plot_data = fig_to_html(figure)
+	elif backtest:
+		outputs = []
+		balance = 200 # love money $$
+		strength_to_usd = 25
+		start_balance = balance
+		shares = 0
+		for price in enumerate(prices):
+			try:
+				singal, strength = algorithm_output(algorithm, prices[0:price[0]])
+				usd_amount = strength * strength_to_usd
+				shares_amount = usd_amount / price[1]
+				if singal == 'buy' and balance >= usd_amount:
+					outputs.append((price[1], (singal, strength)))
+					balance -= usd_amount
+					shares += shares_amount
+				elif singal == 'sell' and shares >= shares_amount:
+					outputs.append((price[1], (singal, strength)))
+					balance += usd_amount
+					shares -= shares_amount
+			except (IndexError, ValueError):
+				pass
+		backtest_data = {
+			'outputs': outputs, 
+			'algorithm': algorithm,  
+			'balance': balance, 
+			'start_balance': start_balance,
+			'total_balance': balance + shares * price[1],
+			'strength_to_usd': strength_to_usd, 
+			'shares': shares,
+			'profit': (balance + shares * price[1]) - start_balance
+		}	
+		return backtest_data	
 	else:
 		# Save plot into buffer instead of the FS
 		svg_buffer = io.StringIO()

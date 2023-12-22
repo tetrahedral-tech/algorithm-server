@@ -5,7 +5,7 @@ from flask import Flask
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 from price import update_cached_prices
-from views import internal_checker, plot, worth, interval, update_interval, backtest
+from views import internal_checker, plot, worth, interval, update_interval
 
 load_dotenv()
 
@@ -18,7 +18,6 @@ app.add_url_rule('/worth/<bot_id>', view_func=worth.worth)
 app.add_url_rule('/interval', view_func=interval.interval)
 app.add_url_rule('/internal_checker', view_func=internal_checker.internal_checker)
 app.add_url_rule('/update_interval', view_func=update_interval.update_interval, methods=['POST'])
-app.add_url_rule('/backtest/<algorithm>', view_func=backtest.backtest)
 
 def job_loop():
 	while True:
