@@ -11,7 +11,7 @@ def signal(prices, data):
 	if prices[-1] > upper_band[-1]:
 		return 'sell', 1
 	elif prices[-1] < lower_band[-1]:
-		return 'buy', 0.5
+		return 'buy', 1
 
 	return 'no_action', 0
 
