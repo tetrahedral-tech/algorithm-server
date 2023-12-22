@@ -26,8 +26,8 @@ def backtest(algorithm):
 		return 'Unsupported Algorithm', 404	
 
 	outputs = []
-	strength_to_usd = 20000
-	money = 20000 #love fake money
+	strength_to_usd = 25
+	money = 200 #love fake money
 	start_money = money
 	shares = 0
 
