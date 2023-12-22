@@ -57,9 +57,6 @@ def backtest(algorithm):
 		'start_balance': start_balance,
 		'total_balance': balance + shares * price[1],
 		'strength_to_usd': strength_to_usd, 
-		'shares': shares, 
-		'last_price': price[1], 
-		'interval': interval,
-		'win/lose': (balance + shares * price[1]) - start_balance ,
-		'times_traded': len(outputs)
+		'shares': shares,
+		'profit': (balance + shares * price[1]) - start_balance
 		}
