@@ -6,8 +6,7 @@ def algorithm(prices, window_size=20, standard_deviations=2):
 	return BBANDS(prices, timeperiod=window_size, nbdevup=standard_deviations, nbdevdn=standard_deviations)
 
 def signal(prices, data):
-	upper_band, middle_band, lower_band = data
-
+	upper_band, _, lower_band = data # _ because the middle band will not be used 
 	if prices[-1] > upper_band[-1]:
 		return 'sell', 1
 	elif prices[-1] < lower_band[-1]:
