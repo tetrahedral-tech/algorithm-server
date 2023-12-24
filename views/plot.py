@@ -1,20 +1,15 @@
+from price import get_prices, get_default_interval, get_cached_prices, is_cached_interval, is_supported_interval
 import matplotlib.pyplot as plt
 import plots.colors as colors
 import matplotlib.dates as md
 import matplotlib as mpl
 import numpy as np
 import io
+from algorithms.algorithm_output import algorithm_output
 from importlib import import_module
 from utils import get_algorithms
 from mpld3 import fig_to_html
 from flask import request
-from price import get_prices, get_default_interval, get_cached_prices, is_cached_interval, is_supported_interval
-
-
-def algorithm_output(algorithm, prices):
-	module = import_module(f'algorithms.{algorithm}')
-	signal, strength = module.signal(prices, module.algorithm(prices))
-	return signal, strength
 
 mpl.use('Agg')
 
