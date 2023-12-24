@@ -1,4 +1,3 @@
-import jwt, os
 from flask import request
 from ipaddress import ip_address
 from utils import authorize_server

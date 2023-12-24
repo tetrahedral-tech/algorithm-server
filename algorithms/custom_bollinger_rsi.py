@@ -14,7 +14,7 @@ def algorithm(prices, window_size_rsi=13, window_size_bollinger_bands=30):
 
 def signal(prices, data):
 	price = prices[-1]
-	upper_band, lower_band, middle_band, rsi_line = data
+	upper_band, lower_band, _, rsi_line = data # _ is for optomization because the middle band will not be used 
 
 	if lower_band[-1] >= price and 30 >= rsi_line[-1]:
 		return 'buy', 1
@@ -30,7 +30,7 @@ def plot(prices, timestamps, **kwargs):
 	plt.subplot(gs[0, :])
 	plt.plot(timestamps, prices, color=colors.primary())
 
-	upper_band, middle_band, lower_band, rsi_line = algorithm(prices, **kwargs)
+	upper_band, _, lower_band, rsi_line = algorithm(prices, **kwargs)
 	sliced_prices = prices[:min(upper_band.shape[0], rsi_line.shape[0])]
 
 	upper_condition = (prices >= upper_band) & (rsi_line >= 70)

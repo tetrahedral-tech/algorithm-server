@@ -1,6 +1,5 @@
 import os
 import numpy as np
-from math import ceil #remove it if u dont need it , fouad
 from requests import get
 from redis import from_url
 from dotenv import load_dotenv
