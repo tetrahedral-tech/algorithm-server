@@ -2,6 +2,7 @@ import jwt, os
 from pymongo.server_api import ServerApi
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from importlib import import_module
 
 load_dotenv()
 
@@ -24,3 +25,11 @@ def authorize_server(encoded):
 		raise Exception('Client Token')
 
 	return decoded
+
+def algorithm_output(algorithm, prices, backtest=False):
+	module = import_module(f'algorithms.{algorithm}')
+	signal, strength = module.signal(prices, module.algorithm(prices))
+	if backtest:
+		return signal, strength
+		
+	return algorithm, (signal, strength)
