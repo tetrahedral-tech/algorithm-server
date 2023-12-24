@@ -1,4 +1,4 @@
-from algorithms.algorithm_output import algorithm_output
+from utils import algorithm_output
 
 def backtest(algorithm, prices, balance = 200, strength_to_usd = 100): #TODO @fou3fou3 fix prices list with algos IndexError , ValueError
 	outputs = []
