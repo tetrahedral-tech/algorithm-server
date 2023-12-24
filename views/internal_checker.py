@@ -3,8 +3,7 @@ from flask import request
 from redis import from_url
 from price import get_prices
 from ipaddress import ip_address
-from utils import authorize_server, get_algorithms
-from algorithms.algorithm_output import algorithm_output
+from utils import authorize_server, get_algorithms, algorithm_output
 
 redis = from_url(os.environ['REDIS_URI'])
 last_checked_point = 0
