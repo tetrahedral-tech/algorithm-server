@@ -41,7 +41,8 @@ def backtest(algorithm, prices, balance = 200, strength_to_usd = 100, plot=False
 			'final_total': balance + shares * price[1],
 			'strength_to_usd': strength_to_usd, 
 			'shares': shares,
-			'profit': (balance + shares * price[1]) - start_balance
+			'profit': (balance + shares * price[1]) - start_balance,
+			'profit_percentage %': ((balance + shares * price[1]) - start_balance) / start_balance 
 		}	
 
 def plot(back_test_data):
