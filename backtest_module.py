@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from plots import colors
 import io
 
-def backtest(algorithm, prices, balance = 200, strength_to_usd = 100, plot=False): #TODO @fou3fou3 fix prices list with algos IndexError , ValueError
+def backtest(algorithm, prices, balance = 200, strength_to_usd = 190, plot=False): #TODO @fou3fou3 fix prices list with algos IndexError , ValueError
 	transactions = []
 	start_balance = balance
 	shares = 0
@@ -19,16 +19,22 @@ def backtest(algorithm, prices, balance = 200, strength_to_usd = 100, plot=False
 				if singal == 'buy' and balance >= usd_amount:
 					balance -= usd_amount
 					shares += shares_amount
-				elif singal == 'sell' and shares >= shares_amount:
-					balance += usd_amount
-					shares -= shares_amount
+
+				elif singal == 'sell':
+					if shares >= shares_amount:
+						balance += usd_amount
+						shares -= shares_amount
+					else:
+						balance += shares * price[1]
+						shares = 0
+
 				transactions.append({
-					'price': price[1],
-					'signal': singal,
-					'strength': strength,
-					'current_balance': balance,
-					'current_shares': shares
-					})
+							'price': price[1],
+							'signal': singal,
+							'strength': strength,
+							'current_balance': balance,
+							'current_shares': shares
+							})		
 
 		except (IndexError, ValueError):
 			pass
