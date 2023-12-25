@@ -6,9 +6,10 @@ import io
 from importlib import import_module
 from utils import get_algorithms
 from plots.styling import style_plots
-from backtest import backtest
 from mpld3 import fig_to_html
 from flask import request
+
+
 mpl.use('Agg')
 
 figure_size = mpl.rcParams['figure.figsize']
@@ -18,7 +19,6 @@ def plot(algorithm):
 	default_interval = get_default_interval()
 	interval = int(request.args.get('interval') or default_interval)
 	interactive = bool(request.args.get('interactive') or False)
-	backtest_bool = bool(request.args.get('backtest') or False)
 
 	if interval and is_cached_interval(interval):
 		prices, timestamps, _ = get_cached_prices(interval=interval)
@@ -49,8 +49,6 @@ def plot(algorithm):
 	if interactive:
 		# @TODO change d3 and mpld3 urls to local ones
 		plot_data = fig_to_html(figure)
-	elif backtest_bool:
-		return backtest(algorithm=algorithm, prices=prices)	
 	else:
 		# Save plot into buffer instead of the FS
 		svg_buffer = io.StringIO()
