@@ -27,4 +27,3 @@ def backtest_view(algorithm):
 		return plot(backtest(algorithm, prices, plot=plot_bool))
 
 	return backtest(algorithm, prices)
-

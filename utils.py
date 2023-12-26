@@ -31,5 +31,5 @@ def algorithm_output(algorithm, prices, backtest=False):
 	signal, strength = module.signal(prices, module.algorithm(prices))
 	if backtest:
 		return signal, strength
-		
+
 	return algorithm, (signal, strength)

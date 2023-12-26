@@ -5,7 +5,11 @@ from matplotlib.gridspec import GridSpec
 from plots import colors
 import io
 
-def backtest(algorithm, prices, balance = 200, strength_to_usd = 190, plot=False): #TODO @fou3fou3 fix prices list with algos IndexError , ValueError
+def backtest(algorithm,
+             prices,
+             balance=200,
+             strength_to_usd=190,
+             plot=False):  #TODO @fou3fou3 fix prices list with algos IndexError , ValueError
 	transactions = []
 	start_balance = balance
 	shares = 0
@@ -34,36 +38,36 @@ def backtest(algorithm, prices, balance = 200, strength_to_usd = 190, plot=False
 						shares = 0
 
 				transactions.append({
-							'price': price[1],
-							'signal': singal,
-							'strength': strength,
-							'current_balance': balance,
-							'current_shares': shares
-							})		
+				  'price': price[1],
+				  'signal': singal,
+				  'strength': strength,
+				  'current_balance': balance,
+				  'current_shares': shares
+				})
 
 		except (IndexError, ValueError):
 			pass
 
 	return {
-			'transactions': np.array(transactions) if plot else transactions,
-			'algorithm': algorithm,  
-			'balance': balance, 
-			'start_balance': start_balance,
-			'final_total': balance + shares * price[1],
-			'strength_to_usd': strength_to_usd, 
-			'shares': shares,
-			'profit': (balance + shares * price[1]) - start_balance,
-			'profit_percentage %': ((balance + shares * price[1]) - start_balance) / start_balance 
-		}	
+	  'transactions': np.array(transactions) if plot else transactions,
+	  'algorithm': algorithm,
+	  'balance': balance,
+	  'start_balance': start_balance,
+	  'final_total': balance + shares * price[1],
+	  'strength_to_usd': strength_to_usd,
+	  'shares': shares,
+	  'profit': (balance + shares * price[1]) - start_balance,
+	  'profit_percentage %': ((balance + shares * price[1]) - start_balance) / start_balance
+	}
 
 def plot(back_test_data):
 	gs = GridSpec(3, 1, figure=plt.gcf())
 	#@TODO add timestamps @celestials
 
 	indicies = np.arange(back_test_data['transactions'].shape[0])
-	balances = [ transaction['current_balance'] for transaction in back_test_data['transactions'] ]
-	shares = [ transaction['current_shares'] for transaction in back_test_data['transactions'] ]
-	signals = [ transaction['signal'] for transaction in back_test_data['transactions'] ]
+	balances = [transaction['current_balance'] for transaction in back_test_data['transactions']]
+	shares = [transaction['current_shares'] for transaction in back_test_data['transactions']]
+	signals = [transaction['signal'] for transaction in back_test_data['transactions']]
 
 	plt.subplot(gs[0, :])
 	plt.plot(indicies, balances, color=colors.primary())
@@ -75,10 +79,10 @@ def plot(back_test_data):
 	plt.scatter(sell_signals, [balances[i] for i in sell_signals], color=colors.upper())
 
 	plt.text(indicies[-1], balances[-1] - 2, str(back_test_data['final_total']))
-	
+
 	plt.subplot(gs[-1, :])
 	plt.plot(indicies, shares, color=colors.primary())
-	
+
 	svg_buffer = io.StringIO()
 	plt.savefig(svg_buffer, format='svg', transparent=True)
 	plot_data = svg_buffer.getvalue()
