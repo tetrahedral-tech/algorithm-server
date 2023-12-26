@@ -14,12 +14,12 @@ def algorithm(prices, window_size_rsi=13, window_size_bollinger_bands=30):
 
 def signal(prices, data):
 	price = prices[-1]
-	upper_band, lower_band, middle_band, rsi_line = data
+	upper_bands, lower_bands, _, rsi_line = data  # _ is for optomization because the middle band will not be used
 
-	if lower_band[-1] >= price and 30 >= rsi_line[-1]:
-		return 'buy', 0.5
+	if lower_bands[-1] >= price and 30 >= rsi_line[-1]:
+		return 'buy', 1
 
-	if price >= upper_band[-1] and rsi_line[-1] >= 70:
+	if price >= upper_bands[-1] and rsi_line[-1] >= 70:
 		return 'sell', 1
 
 	return 'no_action', 0
@@ -30,11 +30,11 @@ def plot(prices, timestamps, **kwargs):
 	plt.subplot(gs[0, :])
 	plt.plot(timestamps, prices, color=colors.primary())
 
-	upper_band, middle_band, lower_band, rsi_line = algorithm(prices, **kwargs)
-	sliced_prices = prices[:min(upper_band.shape[0], rsi_line.shape[0])]
+	upper_bands, _, lower_bands, rsi_line = algorithm(prices, **kwargs)
+	sliced_prices = prices[:min(upper_bands.shape[0], rsi_line.shape[0])]
 
-	upper_condition = (prices >= upper_band) & (rsi_line >= 70)
-	lower_condition = (lower_band >= prices) & (30 >= rsi_line)
+	upper_condition = (prices >= upper_bands) & (rsi_line >= 70)
+	lower_condition = (lower_bands >= prices) & (30 >= rsi_line)
 	plt.scatter(timestamps[upper_condition], sliced_prices[upper_condition], color=colors.upper())
 	plt.scatter(timestamps[lower_condition], sliced_prices[lower_condition], color=colors.lower())
 
