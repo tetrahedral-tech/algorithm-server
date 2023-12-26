@@ -40,7 +40,7 @@ def get_default_interval():
 			return int(interval)
 	return default_interval
 
-#Get token prices with a specefic interval returns 720 price (kraken-api)
+#maybe add proxies?
 def get_prices(pair='ETH/USD', interval='default'):
 	if interval == 'default':
 		interval = get_default_interval()
