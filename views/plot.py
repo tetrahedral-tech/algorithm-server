@@ -1,13 +1,13 @@
-import io, price
-import matplotlib as mpl
+from price import get_prices, get_default_interval, get_cached_prices, is_cached_interval, is_supported_interval
 import matplotlib.pyplot as plt
-import matplotlib.dates as md
+import matplotlib as mpl
 import numpy as np
-import plots.colors as colors
-from mpld3 import fig_to_html
-from flask import request
+import io
 from importlib import import_module
 from utils import get_algorithms
+from plots.styling import style_plots
+from mpld3 import fig_to_html
+from flask import request
 
 mpl.use('Agg')
 
@@ -15,16 +15,16 @@ figure_size = mpl.rcParams['figure.figsize']
 figure_size[0] = figure_size[0] * 1.5
 
 def plot(algorithm):
-	default_interval = price.get_default_interval()
+	default_interval = get_default_interval()
 	interval = int(request.args.get('interval') or default_interval)
 	interactive = bool(request.args.get('interactive') or False)
 
-	if interval and price.is_cached_interval(interval):
-		prices, timestamps, _ = price.get_cached_prices(interval=interval)
-	elif interval and price.is_supported_interval(interval):
-		prices, timestamps, _ = price.get_prices(interval=interval)
+	if interval and is_cached_interval(interval):
+		prices, timestamps, _ = get_cached_prices(interval=interval)
+	elif interval and is_supported_interval(interval):
+		prices, timestamps, _ = get_prices(interval=interval)
 	elif not interval:
-		prices, timestamps, _ = price.get_cached_prices()
+		prices, timestamps, _ = get_cached_prices()
 	else:
 		return 'Unsupported Interval', 400
 
@@ -43,27 +43,7 @@ def plot(algorithm):
 	except Exception as error:
 		return str(error), 400
 
-	axes = figure.get_axes()
-
-	for axis in axes:
-		axis.tick_params(color=colors.outline(), labelcolor=colors.outline())
-		for spine in axis.spines.values():
-			spine.set_edgecolor(colors.outline())
-
-		if interval >= 10080:
-			xfmt = md.DateFormatter('%Y')
-		elif interval >= 1440:
-			xfmt = md.DateFormatter('%y/%m')
-		elif interval >= 240:
-			xfmt = md.DateFormatter('%m/%d')
-		elif interval >= 15:
-			xfmt = md.DateFormatter('%d')
-		else:
-			xfmt = md.DateFormatter('%H')
-
-		axis.xaxis.set_major_formatter(formatter=xfmt)
-
-	plt.tight_layout()
+	style_plots(figure, plt, interval)
 
 	if interactive:
 		# @TODO change d3 and mpld3 urls to local ones
