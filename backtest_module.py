@@ -1,6 +1,7 @@
 from utils import algorithm_output
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.gridspec import GridSpec
 from plots import colors
 import io
 
@@ -52,15 +53,28 @@ def backtest(algorithm, prices, balance = 200, strength_to_usd = 190, plot=False
 		}	
 
 def plot(back_test_data):
+	gs = GridSpec(3, 1, figure=plt.gcf())
+	#@TODO add timestamps @celestials
 
 	indicies = np.arange(back_test_data['transactions'].shape[0])
 	balances = [ transaction['current_balance'] for transaction in back_test_data['transactions'] ]
 	shares = [ transaction['current_shares'] for transaction in back_test_data['transactions'] ]
+	signals = [ transaction['signal'] for transaction in back_test_data['transactions'] ]
 
+	plt.subplot(gs[0, :])
 	plt.plot(indicies, balances, color=colors.primary())
-	plt.plot(indicies, shares, color=colors.secondary())
-	plt.text(indicies[-1], balances[-1] - 2, str(back_test_data['final_total']))
 
+	buy_signals = np.where(np.array(signals) == 'buy')[0]
+	plt.scatter(buy_signals, [balances[i] for i in buy_signals], color=colors.lower())
+
+	sell_signals = np.where(np.array(signals) == 'sell')[0]
+	plt.scatter(sell_signals, [balances[i] for i in sell_signals], color=colors.upper())
+
+	plt.text(indicies[-1], balances[-1] - 2, str(back_test_data['final_total']))
+	
+	plt.subplot(gs[-1, :])
+	plt.plot(indicies, shares, color=colors.primary())
+	
 	svg_buffer = io.StringIO()
 	plt.savefig(svg_buffer, format='svg', transparent=True)
 	plot_data = svg_buffer.getvalue()
