@@ -17,9 +17,13 @@ def backtest(algorithm, prices, balance = 200, strength_to_usd = 190, plot=False
 			shares_amount = usd_amount / price[1]
 
 			if singal in ['buy', 'sell']:
-				if singal == 'buy' and balance >= usd_amount:
-					balance -= usd_amount
-					shares += shares_amount
+				if singal == 'buy':
+					if balance >= usd_amount:
+						balance -= usd_amount
+						shares += shares_amount
+					else:
+						shares += balance / price[1]
+						balance = 0
 
 				elif singal == 'sell':
 					if shares >= shares_amount:
