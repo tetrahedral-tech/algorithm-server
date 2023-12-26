@@ -1,9 +1,9 @@
 import io, utils
 import numpy as np
 import matplotlib as mpl
-import matplotlib.pyplot as plt
 import matplotlib.dates as md
 import plots.colors as colors
+import matplotlib.pyplot as plt
 from flask import Response, request
 from bson.objectid import ObjectId
 from plots.worth import plot

@@ -1,19 +1,12 @@
 import os
+from flask import request
 from redis import from_url
 from price import get_prices
 from ipaddress import ip_address
-from flask import request
-from importlib import import_module
-from utils import authorize_server, get_algorithms
+from utils import authorize_server, get_algorithms, algorithm_output
 
 redis = from_url(os.environ['REDIS_URI'])
 last_checked_point = 0
-
-def algorithm_output(algorithm, prices):
-	module = import_module(f'algorithms.{algorithm}')
-	signal, strength = module.signal(prices, module.algorithm(prices))
-
-	return algorithm, (signal, strength)
 
 def internal_checker():
 	global last_checked_point

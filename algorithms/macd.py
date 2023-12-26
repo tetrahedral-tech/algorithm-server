@@ -1,12 +1,12 @@
-from talib import MACD, EMA
-import numpy as np
 import matplotlib.pyplot as plt
 import plots.colors as colors
+import numpy as np
+from talib import MACD, EMA
 
 def algorithm(prices, fastperiod=12, slowperiod=26, signalperiod=9):
 	return MACD(prices, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)
 
-def signal(prices, data):
+def signal(_, data):
 	macd, signal, histogram = data
 	positive_histogram = np.abs(histogram)
 	histogram_max = np.max(np.nan_to_num(positive_histogram))

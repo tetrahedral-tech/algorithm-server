@@ -1,6 +1,5 @@
 import os
 import numpy as np
-from math import ceil
 from requests import get
 from redis import from_url
 from dotenv import load_dotenv
@@ -25,14 +24,6 @@ def is_cached_interval(interval):
 	global cached_intervals
 	return interval in cached_intervals
 
-def is_supported_interval(interval):
-	global supported_intervals
-	return interval in supported_intervals
-
-def is_cached_interval(interval):
-	global cached_intervals
-	return interval in cached_intervals
-
 def set_default_interval(interval):
 	global default_interval
 	if not is_supported_interval(interval):
@@ -41,6 +32,7 @@ def set_default_interval(interval):
 	default_interval = interval
 	return default_interval
 
+# Get the default interval
 def get_default_interval():
 	if has_request_context():
 		interval = request.args.get('interval')
@@ -67,6 +59,7 @@ def get_prices(pair='ETH/USD', interval='default'):
 
 	return np.array(prices).astype(float), np.array(timestamps).astype(float), last_complete_point
 
+# Get cached prices previously on redis
 def get_cached_prices(interval='default'):
 	if interval == 'default':
 		interval = get_default_interval()
@@ -83,7 +76,7 @@ def get_cached_prices(interval='default'):
 
 	return np.array(prices).astype(float), np.array(timestamps).astype(float), int(last_complete_point)
 
-# Price Caching
+# Price Caching On Redis DataBase
 def update_cached_prices():
 	for interval in cached_intervals:
 		print(f'Caching prices for {interval}')
