@@ -14,7 +14,7 @@ def algorithm(prices, window_size_rsi=13, window_size_bollinger_bands=30):
 
 def signal(prices, data):
 	price = prices[-1]
-	upper_bands, lower_bands, _, rsi_line = data # _ is for optomization because the middle band will not be used 
+	upper_bands, lower_bands, _, rsi_line = data  # _ is for optomization because the middle band will not be used
 
 	if lower_bands[-1] >= price and 30 >= rsi_line[-1]:
 		return 'buy', 1
