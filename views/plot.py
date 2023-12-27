@@ -14,7 +14,7 @@ mpl.use('Agg')
 figure_size = mpl.rcParams['figure.figsize']
 figure_size[0] = figure_size[0] * 1.5
 
-def plot(algorithm):
+def plot(algorithm_name):
 	default_interval = get_default_interval()
 	interval = int(request.args.get('interval') or default_interval)
 	interactive = bool(request.args.get('interactive') or False)
@@ -28,7 +28,7 @@ def plot(algorithm):
 	else:
 		return 'Unsupported Interval', 400
 
-	if algorithm not in ['price', *get_algorithms()]:
+	if algorithm_name not in ['price', *get_algorithms()]:
 		return 'Unsupported Algorithm', 404
 
 	# Even out timestamps so plotting algos works
@@ -39,7 +39,8 @@ def plot(algorithm):
 	figure = plt.figure()
 
 	try:
-		import_module(f'algorithms.{algorithm}').Algorithm.plot(prices, timestamps)
+		algorithm = import_module(f'algorithms.{algorithm_name}').Algorithm()
+		algorithm.plot(prices=prices, timestamps=timestamps)
 	except Exception as error:
 		return str(error), 400
 

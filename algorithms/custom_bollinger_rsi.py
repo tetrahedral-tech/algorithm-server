@@ -1,20 +1,23 @@
-from .bollinger_bands import Algorithm as bollinger_bands
-from .rsi import Algorithm as rsi
+from .bollinger_bands import Algorithm as BB_algorithm
+from .rsi import Algorithm as RSI_algorithm
 import matplotlib.pyplot as plt
 import plots.colors as colors
 from matplotlib.gridspec import GridSpec
 
 class Algorithm:
-	window_size_rsi=13
-	window_size_bollinger_bands=30
+	def __init__(self, rsi_window_size=13, bollinger_bands_window_size=30):
+		self.rsi_window_size = rsi_window_size
+		self.bollinger_bands_window_size = bollinger_bands_window_size
 
-	def algorithm(prices, window_size_rsi=13, window_size_bollinger_bands=30):
-		bb_data = bollinger_bands.algorithm(prices, window_size=window_size_bollinger_bands)
-		rsi_line = rsi.algorithm(prices, window_size=window_size_rsi)
+	def algorithm(self, prices):
+		Bollinger_Bands = BB_algorithm(window_size=self.bollinger_bands_window_size)
+		bb_data = Bollinger_Bands.algorithm(prices)
+		RSI = RSI_algorithm(window_size=self.rsi_window_size)
+		rsi_line = RSI.algorithm(prices)
 
 		return [*bb_data, rsi_line]
 
-	def signal(prices, data):
+	def signal(self, prices, data):
 		price = prices[-1]
 		upper_bands, lower_bands, _, rsi_line = data 
 
@@ -26,13 +29,13 @@ class Algorithm:
 
 		return 'no_action', 0
 
-	def plot(prices, timestamps, **kwargs):
+	def plot(self, prices, timestamps, **kwargs):
 		gs = GridSpec(3, 1, figure=plt.gcf())
 
 		plt.subplot(gs[0, :])
 		plt.plot(timestamps, prices, color=colors.primary())
 
-		upper_bands, _, lower_bands, rsi_line = Algorithm.algorithm(prices, **kwargs)
+		upper_bands, _, lower_bands, rsi_line = self.algorithm(prices, **kwargs)
 		sliced_prices = prices[:min(upper_bands.shape[0], rsi_line.shape[0])]
 
 		upper_condition = (prices >= upper_bands) & (rsi_line >= 70)
@@ -41,6 +44,8 @@ class Algorithm:
 		plt.scatter(timestamps[lower_condition], sliced_prices[lower_condition], color=colors.lower())
 
 		plt.subplot(gs[-1, :])
-		rsi.plot(prices, timestamps)
+		RSI = RSI = RSI_algorithm(window_size=self.rsi_window_size)
+		RSI.plot(prices, timestamps)
 		plt.subplot(gs[-2, :])
-		bollinger_bands.plot(prices, timestamps)
+		Bollinger_Bands = BB_algorithm(window_size=self.bollinger_bands_window_size)
+		Bollinger_Bands.plot(prices, timestamps)

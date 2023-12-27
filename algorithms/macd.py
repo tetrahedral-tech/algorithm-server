@@ -4,14 +4,13 @@ import numpy as np
 from talib import MACD, EMA
 
 class Algorithm:
-	fastperiod, slowperiod, signalperiod = 12, 26, 9
+	def __init__(self, fastperiod=12, slowperiod=26, signalperiod=9):
+		self.fastperiod, self.slowperiod, self.signalperiod = fastperiod, slowperiod, signalperiod
 
-	@staticmethod
-	def algorithm(prices, fastperiod=12, slowperiod=26, signalperiod=9):
-		return MACD(prices, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)
-	
-	@staticmethod
-	def signal(_, data):
+	def algorithm(self, prices):
+		return MACD(prices, fastperiod=self.fastperiod, slowperiod=self.slowperiod, signalperiod=self.signalperiod)
+
+	def signal(self, _, data):
 		macd, signal, histogram = data
 		positive_histogram = np.abs(histogram)
 		histogram_max = np.max(np.nan_to_num(positive_histogram))
@@ -23,9 +22,8 @@ class Algorithm:
 
 		return 'no_action', 0
 
-	@staticmethod
-	def plot(prices, timestamps, **kwargs):
-		macd, signal, histogram = Algorithm.algorithm(prices, **kwargs)
+	def plot(self, prices, timestamps, **kwargs):
+		macd, signal, histogram = self.algorithm(prices, **kwargs)
 
 		upper_condition = np.insert((macd[1:] > signal[1:]) & (macd[:-1] < signal[:-1]), 0, False)
 		lower_condition = np.insert((macd[1:] < signal[1:]) & (macd[:-1] > signal[:-1]), 0, False)
