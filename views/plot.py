@@ -39,7 +39,7 @@ def plot(algorithm):
 	figure = plt.figure()
 
 	try:
-		import_module(f'algorithms.{algorithm}').plot(prices, timestamps)
+		import_module(f'algorithms.{algorithm}').Algorithm.plot(prices, timestamps)
 	except Exception as error:
 		return str(error), 400
 
