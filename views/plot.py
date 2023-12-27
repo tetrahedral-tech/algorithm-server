@@ -42,7 +42,7 @@ def plot(algorithm):
 	except Exception as error:
 		return str(error), 400
 
-	style_plots(figure, plt, interval)
+	style_plots(interval)
 
 		# @TODO change d3 and mpld3 urls to local ones
 	return fig_to_html(figure) if interactive else svg_plot()
