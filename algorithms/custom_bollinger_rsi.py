@@ -8,6 +8,7 @@ class Algorithm:
 	def __init__(self, rsi_window_size=13, bollinger_bands_window_size=30):
 		self.rsi_window_size = rsi_window_size
 		self.bollinger_bands_window_size = bollinger_bands_window_size
+		self.window_size = max(rsi_window_size, bollinger_bands_window_size)
 
 	def algorithm(self, prices):
 		Bollinger_Bands = BB_algorithm(window_size=self.bollinger_bands_window_size)
