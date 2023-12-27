@@ -3,33 +3,37 @@ import numpy as np
 import matplotlib.pyplot as plt
 import plots.colors as colors
 
-def algorithm(prices, window_size=14):
-	return RSI(prices, timeperiod=window_size)
+class Algorithm:
+	window_size = 14
 
-def signal(_, data, high=70, low=30):
-	rsi = data
+	@staticmethod
+	def algorithm(prices, window_size=14):
+		return RSI(prices, timeperiod=window_size)
 
-	if rsi[-1] > high:
-		strength = (rsi[-1] - high) * (1 / low)
-		return 'sell', strength
+	@staticmethod
+	def signal(_, data, high=70, low=30):
+		rsi = data
 
-	elif rsi[-1] < low:
-		strength = 1 - rsi[-1] * (1 / low)
-		return 'buy', strength
+		if rsi[-1] > high:
+			strength = (rsi[-1] - high) * (1 / low)
+			return 'sell', strength
 
-	return 'no_action', 0
+		elif rsi[-1] < low:
+			strength = 1 - rsi[-1] * (1 / low)
+			return 'buy', strength
 
-def plot(prices, timestamps, **kwargs):
-	rsi_line = algorithm(prices, **kwargs)
+		return 'no_action', 0
 
-	plt.plot(timestamps, rsi_line, color=colors.primary())
+	@staticmethod
+	def plot(prices, timestamps, **kwargs):
+		rsi_line = Algorithm.algorithm(prices, **kwargs)
 
-	# Thresholds
-	upper = np.full(rsi_line.shape, 70)
-	lower = np.full(rsi_line.shape, 30)
+		plt.plot(timestamps, rsi_line, color=colors.primary())
 
-	plt.fill_between(timestamps, upper, lower, color='grey', alpha=0.3)
-	plt.plot(timestamps, upper, linestyle='dashed', color=colors.upper())
-	plt.plot(timestamps, lower, linestyle='dashed', color=colors.lower())
+		# Thresholds
+		upper = np.full(rsi_line.shape, 70)
+		lower = np.full(rsi_line.shape, 30)
 
-	return plt
+		plt.fill_between(timestamps, upper, lower, color='grey', alpha=0.3)
+		plt.plot(timestamps, upper, linestyle='dashed', color=colors.upper())
+		plt.plot(timestamps, lower, linestyle='dashed', color=colors.lower())

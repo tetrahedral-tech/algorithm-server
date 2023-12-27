@@ -18,7 +18,7 @@ def internal_checker():
 	except Exception:
 		return 'Unauthorized', 401
 
-	prices, timestamps, last_complete_point = get_prices()
+	prices, _, last_complete_point = get_prices()
 	new_datapoint = last_complete_point > last_checked_point
 	if new_datapoint:
 		last_checked_point = last_complete_point

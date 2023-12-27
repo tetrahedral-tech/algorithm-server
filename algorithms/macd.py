@@ -3,42 +3,48 @@ import plots.colors as colors
 import numpy as np
 from talib import MACD, EMA
 
-def algorithm(prices, fastperiod=12, slowperiod=26, signalperiod=9):
-	return MACD(prices, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)
+class Algorithm:
+	fastperiod, slowperiod, signalperiod = 12, 26, 9
 
-def signal(_, data):
-	macd, signal, histogram = data
-	positive_histogram = np.abs(histogram)
-	histogram_max = np.max(np.nan_to_num(positive_histogram))
+	@staticmethod
+	def algorithm(prices, fastperiod=12, slowperiod=26, signalperiod=9):
+		return MACD(prices, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)
+	
+	@staticmethod
+	def signal(_, data):
+		macd, signal, histogram = data
+		positive_histogram = np.abs(histogram)
+		histogram_max = np.max(np.nan_to_num(positive_histogram))
 
-	if macd[-1] > signal[-1] and macd[-2] < signal[-2]:
-		return 'buy', positive_histogram[-1] / histogram_max
-	elif macd[-1] < signal[-1] and macd[-2] > signal[-2]:
-		return 'sell', positive_histogram[-1] / histogram_max
+		if macd[-1] > signal[-1] and macd[-2] < signal[-2]:
+			return 'buy', positive_histogram[-1] / histogram_max
+		elif macd[-1] < signal[-1] and macd[-2] > signal[-2]:
+			return 'sell', positive_histogram[-1] / histogram_max
 
-	return 'no_action', 0
+		return 'no_action', 0
 
-def plot(prices, timestamps, **kwargs):
-	macd, signal, histogram = algorithm(prices, **kwargs)
+	@staticmethod
+	def plot(prices, timestamps, **kwargs):
+		macd, signal, histogram = Algorithm.algorithm(prices, **kwargs)
 
-	upper_condition = np.insert((macd[1:] > signal[1:]) & (macd[:-1] < signal[:-1]), 0, False)
-	lower_condition = np.insert((macd[1:] < signal[1:]) & (macd[:-1] > signal[:-1]), 0, False)
+		upper_condition = np.insert((macd[1:] > signal[1:]) & (macd[:-1] < signal[:-1]), 0, False)
+		lower_condition = np.insert((macd[1:] < signal[1:]) & (macd[:-1] > signal[:-1]), 0, False)
 
-	plt.subplot(211)
-	plt.plot(timestamps, prices, color=colors.primary())
-	plt.plot(timestamps, EMA(prices, timeperiod=12), color=colors.secondary())
-	plt.plot(timestamps, EMA(prices, timeperiod=26), color=colors.tertiary())
+		plt.subplot(211)
+		plt.plot(timestamps, prices, color=colors.primary())
+		plt.plot(timestamps, EMA(prices, timeperiod=12), color=colors.secondary())
+		plt.plot(timestamps, EMA(prices, timeperiod=26), color=colors.tertiary())
 
-	plt.scatter(timestamps[upper_condition], prices[upper_condition], color=colors.upper())
-	plt.scatter(timestamps[lower_condition], prices[lower_condition], color=colors.lower())
+		plt.scatter(timestamps[upper_condition], prices[upper_condition], color=colors.upper())
+		plt.scatter(timestamps[lower_condition], prices[lower_condition], color=colors.lower())
 
-	plt.subplot(212)
-	plt.plot(timestamps, macd, color=colors.primary())
-	plt.plot(timestamps, signal, color=colors.secondary())
+		plt.subplot(212)
+		plt.plot(timestamps, macd, color=colors.primary())
+		plt.plot(timestamps, signal, color=colors.secondary())
 
-	plt.bar(timestamps[histogram >= 0], histogram[histogram >= 0], color=colors.uppersecondary())
-	plt.bar(timestamps[histogram < 0], histogram[histogram < 0], color=colors.lowersecondary())
-	plt.plot(timestamps, np.zeros(prices.shape[0]), color=colors.inner(), linestyle='-')
+		plt.bar(timestamps[histogram >= 0], histogram[histogram >= 0], color=colors.uppersecondary())
+		plt.bar(timestamps[histogram < 0], histogram[histogram < 0], color=colors.lowersecondary())
+		plt.plot(timestamps, np.zeros(prices.shape[0]), color=colors.inner(), linestyle='-')
 
-	plt.scatter(timestamps[upper_condition], signal[upper_condition], color=colors.upper())
-	plt.scatter(timestamps[lower_condition], signal[lower_condition], color=colors.lower())
+		plt.scatter(timestamps[upper_condition], signal[upper_condition], color=colors.upper())
+		plt.scatter(timestamps[lower_condition], signal[lower_condition], color=colors.lower())

@@ -28,7 +28,7 @@ def authorize_server(encoded):
 
 def algorithm_output(algorithm, prices, backtest=False):
 	module = import_module(f'algorithms.{algorithm}')
-	signal, strength = module.signal(prices, module.algorithm(prices))
+	signal, strength = module.Algorithm.signal(prices, module.Algorithm.algorithm(prices))
 	if backtest:
 		return signal, strength
 
