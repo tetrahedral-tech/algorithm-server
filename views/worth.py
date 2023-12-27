@@ -1,10 +1,10 @@
-import io, utils
+import utils
 import numpy as np
 import matplotlib as mpl
 import matplotlib.dates as md
 import plots.colors as colors
 import matplotlib.pyplot as plt
-from flask import Response, request
+from flask import request
 from bson.objectid import ObjectId
 from plots.worth import plot
 
@@ -38,10 +38,4 @@ def worth(bot_id):
 
 	plt.tight_layout()
 
-	buffer = io.BytesIO()
-	plt.savefig(buffer, format='svg', transparent=True)
-	value = buffer.getvalue()
-	plt.close()
-	buffer.close()
-
-	return Response(value, mimetype='image/svg+xml')
+	return utils.svg_plot()

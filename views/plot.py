@@ -2,9 +2,8 @@ from price import get_prices, get_default_interval, get_cached_prices, is_cached
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
-import io
 from importlib import import_module
-from utils import get_algorithms
+from utils import get_algorithms, svg_plot
 from plots.styling import style_plots
 from mpld3 import fig_to_html
 from flask import request
@@ -45,15 +44,5 @@ def plot(algorithm):
 
 	style_plots(figure, plt, interval)
 
-	if interactive:
 		# @TODO change d3 and mpld3 urls to local ones
-		plot_data = fig_to_html(figure)
-	else:
-		# Save plot into buffer instead of the FS
-		svg_buffer = io.StringIO()
-		plt.savefig(svg_buffer, format='svg', transparent=True)
-		plot_data = svg_buffer.getvalue()
-		plt.close()  # Solved plots overwriting each other
-		svg_buffer.close()
-
-	return plot_data
+	return fig_to_html(figure) if interactive else svg_plot()
