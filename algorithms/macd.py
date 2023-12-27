@@ -9,7 +9,7 @@ class Algorithm:
 	@staticmethod
 	def algorithm(prices, fastperiod=12, slowperiod=26, signalperiod=9):
 		return MACD(prices, fastperiod=fastperiod, slowperiod=slowperiod, signalperiod=signalperiod)
-	
+
 	@staticmethod
 	def signal(_, data):
 		macd, signal, histogram = data

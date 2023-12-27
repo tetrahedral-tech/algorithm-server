@@ -5,8 +5,8 @@ import plots.colors as colors
 from matplotlib.gridspec import GridSpec
 
 class Algorithm:
-	window_size_rsi=13
-	window_size_bollinger_bands=30
+	window_size_rsi = 13
+	window_size_bollinger_bands = 30
 
 	def algorithm(prices, window_size_rsi=13, window_size_bollinger_bands=30):
 		bb_data = bollinger_bands.algorithm(prices, window_size=window_size_bollinger_bands)
@@ -16,7 +16,7 @@ class Algorithm:
 
 	def signal(prices, data):
 		price = prices[-1]
-		upper_bands, lower_bands, _, rsi_line = data 
+		upper_bands, lower_bands, _, rsi_line = data
 
 		if lower_bands[-1] >= price and 30 >= rsi_line[-1]:
 			return 'buy', 1
