@@ -5,11 +5,7 @@ from matplotlib.gridspec import GridSpec
 from plots import colors
 import io
 
-def backtest(algorithm,
-             prices,
-             balance=200,
-             strength_to_usd=190,
-             plot=False):  #TODO @fou3fou3 fix prices list with algos IndexError , ValueError
+def backtest(algorithm, prices, balance=200, strength_to_usd=100, plot=False):  #TODO @fou3fou3 fix prices list with algos IndexError , ValueError
 	transactions = []
 	start_balance = balance
 	shares = 0
