@@ -12,7 +12,7 @@ class Algorithm:
 	def algorithm(self, prices):
 		return RSI(prices, timeperiod=self.window_size)
 
-	def signal(self, _, data):
+	def signal(self, prices, data):
 		rsi = data
 
 		if rsi[-1] > self.high:

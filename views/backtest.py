@@ -20,7 +20,7 @@ def backtest_view(algorithm_name):
 	else:
 		return 'Unsupported Interval', 400
 
-	if algorithm_name not in ['price', *get_algorithms()]:
+	if algorithm_name not in [*get_algorithms()]:
 		return 'Unsupported Algorithm', 404
 
 	if plot_bool:
