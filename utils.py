@@ -1,4 +1,5 @@
-import jwt, os
+import jwt, os, io
+import matplotlib.pyplot as plt
 from pymongo.server_api import ServerApi
 from pymongo import MongoClient
 from dotenv import load_dotenv
@@ -33,3 +34,12 @@ def algorithm_output(algorithm, prices, backtest=False):
 		return signal, strength
 
 	return algorithm, (signal, strength)
+
+def svg_plot():
+	svg_buffer = io.StringIO()
+	plt.savefig(svg_buffer, format='svg', transparent=True)
+	plot_data = svg_buffer.getvalue()
+	plt.close()
+	svg_buffer.close()
+
+	return plot_data
