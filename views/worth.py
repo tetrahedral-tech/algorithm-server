@@ -1,9 +1,7 @@
 import utils
 import numpy as np
 import matplotlib as mpl
-import matplotlib.dates as md
-import plots.colors as colors
-import matplotlib.pyplot as plt
+from plots.styling import style_plots
 from flask import request
 from bson.objectid import ObjectId
 from plots.worth import plot
@@ -26,16 +24,5 @@ def worth(bot_id):
 		timestamps, values = np.transpose([[worth['timestamp'] / 1000, worth['value']] for worth in bot['worth']])
 		plot(values, timestamps)
 
-	axes = plt.gcf().get_axes()
-
-	for axis in axes:
-		axis.tick_params(color=colors.outline(), labelcolor=colors.outline())
-		for spine in axis.spines.values():
-			spine.set_edgecolor(colors.outline())
-
-		xfmt = md.DateFormatter('%y/%m')
-		axis.xaxis.set_major_formatter(formatter=xfmt)
-
-	plt.tight_layout()
-
+	style_plots()
 	return utils.svg_plot()

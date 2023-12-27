@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from utils import algorithm_output, svg_plot
 from matplotlib.gridspec import GridSpec
 from plots import colors
+from plots.styling import style_plots
 
 def backtest(algorithm,
              prices,
@@ -79,5 +80,7 @@ def plot(data):
 
 	plt.subplot(gs[-1, :])
 	plt.plot(timestamps, shares, color=colors.primary())
+
+	style_plots()
 
 	return svg_plot()
