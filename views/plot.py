@@ -9,7 +9,6 @@ from plots.styling import style_plots
 from mpld3 import fig_to_html
 from flask import request
 
-
 mpl.use('Agg')
 
 figure_size = mpl.rcParams['figure.figsize']

@@ -1,5 +1,5 @@
 import matplotlib.dates as md
-from plots import colors #Dont change it to import colors or import .colors ... won't work
+from plots import colors  #Dont change it to import colors or import .colors ... won't work
 
 def style_plots(figure, plt, interval):
 	axes = figure.get_axes()
