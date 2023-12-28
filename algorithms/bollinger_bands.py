@@ -3,16 +3,14 @@ import plots.colors as colors
 from talib import BBANDS
 
 class Algorithm:
-	window_size = 20
-	standard_deviations = 2
+	def __init__(self, window_size=20, standard_deviations=2):
+		self.window_size, self.standard_deviations = window_size, standard_deviations
 
-	@staticmethod
-	def algorithm(prices, window_size=20, standard_deviations=2):
-		return BBANDS(prices, timeperiod=window_size, nbdevup=standard_deviations, nbdevdn=standard_deviations)
+	def algorithm(self, prices):
+		return BBANDS(prices, timeperiod=self.window_size, nbdevup=self.standard_deviations, nbdevdn=self.standard_deviations)
 
-	@staticmethod
-	def signal(prices, data):
-		upper_bands, _, lower_bands = data  # _ because the middle band will not be used
+	def signal(self, prices, data):
+		upper_bands, _, lower_bands = data  
 		if prices[-1] > upper_bands[-1]:
 			return 'sell', 1
 		elif prices[-1] < lower_bands[-1]:
@@ -20,9 +18,8 @@ class Algorithm:
 
 		return 'no_action', 0
 
-	@staticmethod
-	def plot(prices, timestamps, **kwargs):
-		upper_bands, middle_bands, lower_bands = Algorithm.algorithm(prices, **kwargs)
+	def plot(self, prices, timestamps, **kwargs):
+		upper_bands, middle_bands, lower_bands = self.algorithm(prices, **kwargs)
 
 		plt.fill_between(timestamps, upper_bands, lower_bands, color='grey', alpha=0.3)
 
