@@ -6,6 +6,7 @@ from matplotlib.gridspec import GridSpec
 
 class Algorithm:
 	def __init__(self, rsi_window_size=13, bollinger_bands_window_size=20, rsi_high=70, rsi_low=30):
+
 		self.rsi_window_size = rsi_window_size
 		self.rsi_high = rsi_high
 		self.rsi_low = rsi_low
@@ -22,8 +23,10 @@ class Algorithm:
 
 	def signal(self, prices, data):
 		price = prices[-1]
+
 		upper_bands, _, lower_bands, rsi_line = data #middle bands not needed && corrected bollinger bands from upper, lowe, middle to current
 		if (lower_bands[-1] >= price) & (self.rsi_low >= rsi_line[-1]):
+
 			return 'buy', 1
 
 		if (upper_bands[-1] <= price) & (self.rsi_high <= rsi_line[-1]):
