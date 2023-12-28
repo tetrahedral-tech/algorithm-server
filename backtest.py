@@ -16,12 +16,12 @@ def backtest(algorithm,
 	balance = start_balance
 	shares = 0
 
-	for window in np.lib.stride_tricks.sliding_window_view(np.column_stack(prices, timestamps), window_size):
+	for window in np.lib.stride_tricks.sliding_window_view(np.column_stack((prices, timestamps)), window_size, axis=0):
 		prices_windowed, timestamps_windowed = window
 
-		singal, strength = algorithm_output(algorithm, prices_windowed)
+		singal, strength = algorithm_output(algorithm, prices_windowed, backtest=True)
 		usd_amount = strength * strength_to_usd
-		shares_amount = usd_amount / prices
+		shares_amount = usd_amount / prices_windowed[-1]
 
 		if singal in ['buy', 'sell']:
 			if singal == 'buy':
@@ -76,7 +76,7 @@ def plot(data):
 	sell_signals = np.where(np.array(signals) == 'sell')[0]
 	plt.scatter(sell_signals, [balances[i] for i in sell_signals], color=colors.upper())
 
-	plt.text(timestamps[-1], balances[-1] - 2, str(data['final_total']))
+	plt.text(timestamps[-1], balances[-1] - 2, str(data['net_worth']))
 
 	plt.subplot(gs[-1, :])
 	plt.plot(timestamps, shares, color=colors.primary())
