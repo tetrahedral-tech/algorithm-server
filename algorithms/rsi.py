@@ -30,8 +30,8 @@ class Algorithm:
 		plt.plot(timestamps, rsi_line, color=colors.primary())
 
 		# Thresholds
-		upper = np.full(rsi_line.shape, 70)
-		lower = np.full(rsi_line.shape, 30)
+		upper = np.full(rsi_line.shape, self.high)
+		lower = np.full(rsi_line.shape, self.low)
 
 		plt.fill_between(timestamps, upper, lower, color='grey', alpha=0.3)
 		plt.plot(timestamps, upper, linestyle='dashed', color=colors.upper())
