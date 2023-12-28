@@ -6,12 +6,11 @@ from talib import MACD, EMA
 class Algorithm:
 	def __init__(self, fastperiod=12, slowperiod=26, signalperiod=9):
 		self.fastperiod, self.slowperiod, self.signalperiod = fastperiod, slowperiod, signalperiod
-		self.window_size = max(fastperiod, slowperiod, signalperiod) #We need the biggest period so we can ask backtest for prices based on the length
 
 	def algorithm(self, prices):
 		return MACD(prices, fastperiod=self.fastperiod, slowperiod=self.slowperiod, signalperiod=self.signalperiod)
 
-	def signal(self, prices, data):
+	def signal(self, _, data):
 		macd, signal, histogram = data
 		positive_histogram = np.abs(histogram)
 		histogram_max = np.max(np.nan_to_num(positive_histogram))
