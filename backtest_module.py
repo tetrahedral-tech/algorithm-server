@@ -2,42 +2,37 @@ from utils import algorithm_output
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
-from importlib import import_module
-from numpy.lib.stride_tricks import sliding_window_view
 from plots import colors
 import io
 
-def backtest(algorithm, prices, balance=200, strength_to_usd=100, plot=False):  #TODO @fou3fou3 fix prices list with algos IndexError , ValueError
+def backtest(algorithm, prices, balance=200, strength_to_usd=200, plot=False):  
 	transactions = []
 	start_balance = balance
 	shares = 0
-	algorithm_window_size = import_module(f'algorithms.{algorithm}').Algorithm().window_size
 
-	
-	for windowed_prices in sliding_window_view(prices, algorithm_window_size):
-		singal, strength = algorithm_output(algorithm, windowed_prices, backtest=True)
+	for index, price in enumerate(prices, 1):
+		singal, strength = algorithm_output(algorithm, prices[0:index], backtest=True)
 		usd_amount = strength * strength_to_usd
-		shares_amount = usd_amount / windowed_prices[-1]
+		shares_amount = usd_amount / price
 
-		print(windowed_prices, len(windowed_prices))
 		if singal in ['buy', 'sell']:
 			if singal == 'buy':
 				if balance >= usd_amount:
 					balance -= usd_amount
 					shares += shares_amount
 				else:
-					shares += balance / windowed_prices[-1]
+					shares += balance / price
 					balance = 0
 			elif singal == 'sell':
 				if shares >= shares_amount:
 					balance += usd_amount
 					shares -= shares_amount
 				else:
-					balance += shares * windowed_prices[-1]
+					balance += shares * price
 					shares = 0
 
 			transactions.append({
-				'price': windowed_prices[-1],
+				'price': price,
 				'signal': singal,
 				'strength': strength,
 				'current_balance': balance,
@@ -50,11 +45,11 @@ def backtest(algorithm, prices, balance=200, strength_to_usd=100, plot=False):  
 	  'algorithm': algorithm,
 	  'balance': balance,
 	  'start_balance': start_balance,
-	  'final_total': balance + shares * windowed_prices[-1],
+	  'final_total': balance + shares * price,
 	  'strength_to_usd': strength_to_usd,
 	  'shares': shares,
-	  'profit': (balance + shares * windowed_prices[-1]) - start_balance,
-	  'profit_percentage %': ((balance + shares * windowed_prices[-1]) - start_balance) / start_balance
+	  'profit': (balance + shares * price) - start_balance,
+	  'profit_percentage %': ((balance + shares * price) - start_balance) / start_balance
 	}
 
 def plot(back_test_data):

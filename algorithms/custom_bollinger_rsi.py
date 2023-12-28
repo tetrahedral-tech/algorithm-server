@@ -20,13 +20,12 @@ class Algorithm:
 
 	def signal(self, prices, data):
 		price = prices[-1]
-		upper_bands, lower_bands, _, rsi_line = data 
-
-		if lower_bands[-1] >= price and 30 >= rsi_line[-1]:
+		upper_bands, _, lower_bands, rsi_line = data #middle bands not needed && corrected bollinger bands from upper, lowe, middle to current
+		if (lower_bands[-1] >= price) & (30 >= rsi_line[-1]):
 			return 'buy', 1
 
-		if price >= upper_bands[-1] and rsi_line[-1] >= 70:
-			return 'sell', 1
+		if (upper_bands[-1] <= price) & (70 <= rsi_line[-1]):
+			return 'sell', 0.5
 
 		return 'no_action', 0
 
