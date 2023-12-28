@@ -77,9 +77,9 @@ def get_cached_prices(interval='default'):
 	return np.array(prices).astype(float), np.array(timestamps).astype(float), int(last_complete_point)
 
 # Price Caching On Redis DataBase
-def update_cached_prices():
+def update_cached_prices(log=True):
 	for interval in cached_intervals:
-		print(f'Caching prices for {interval}')
+		if log : print(f'Caching prices for {interval}')
 		prices, timestamps, last_complete_point = get_prices(interval=interval)
 
 		redis.delete(f'prices:{interval}')

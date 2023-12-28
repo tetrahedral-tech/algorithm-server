@@ -11,19 +11,19 @@ def backtest(algorithm, prices, balance=200, strength_to_usd=200, plot=False):
 	shares = 0
 
 	for index, price in enumerate(prices, 1):
-		singal, strength = algorithm_output(algorithm, prices[0:index], backtest=True)
+		signal, strength = algorithm_output(algorithm, prices[0:index], backtest=True)
 		usd_amount = strength * strength_to_usd
 		shares_amount = usd_amount / price
 
-		if singal in ['buy', 'sell']:
-			if singal == 'buy':
+		if signal in ['buy', 'sell']:
+			if signal == 'buy':
 				if balance >= usd_amount:
 					balance -= usd_amount
 					shares += shares_amount
 				else:
 					shares += balance / price
 					balance = 0
-			elif singal == 'sell':
+			elif signal == 'sell':
 				if shares >= shares_amount:
 					balance += usd_amount
 					shares -= shares_amount
@@ -33,7 +33,7 @@ def backtest(algorithm, prices, balance=200, strength_to_usd=200, plot=False):
 
 			transactions.append({
 			  'price': price,
-			  'signal': singal,
+			  'signal': signal,
 			  'strength': strength,
 			  'current_balance': balance,
 			  'current_shares': shares
