@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import plots.colors as colors
 
 class Algorithm:
+
 	def __init__(self, window_size=14, high=70, low=30):
 		self.window_size = window_size
 		self.high = high
