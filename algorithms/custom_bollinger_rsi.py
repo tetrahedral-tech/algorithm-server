@@ -1,5 +1,5 @@
-from .bollinger_bands import Algorithm as BB_algorithm
-from .rsi import Algorithm as RSI_algorithm
+from .bollinger_bands import Algorithm as BollingerBands
+from .rsi import Algorithm as RSI
 import matplotlib.pyplot as plt
 import plots.colors as colors
 from matplotlib.gridspec import GridSpec
@@ -7,7 +7,6 @@ from matplotlib.gridspec import GridSpec
 class Algorithm:
 
 	def __init__(self, rsi_window_size=13, bollinger_bands_window_size=20, rsi_high=70, rsi_low=30):
-
 		self.rsi_window_size = rsi_window_size
 		self.rsi_high = rsi_high
 		self.rsi_low = rsi_low
@@ -15,10 +14,10 @@ class Algorithm:
 		self.window_size = max(rsi_window_size, bollinger_bands_window_size)
 
 	def algorithm(self, prices):
-		Bollinger_Bands = BB_algorithm(window_size=self.bollinger_bands_window_size)
+		Bollinger_Bands = BollingerBands(window_size=self.bollinger_bands_window_size)
 		bb_data = Bollinger_Bands.algorithm(prices)
-		RSI = RSI_algorithm(window_size=self.rsi_window_size)
-		rsi_line = RSI.algorithm(prices, self.rsi_high, self.rsi_low)
+		rsi = RSI(window_size=self.rsi_window_size, high=self.rsi_high, low=self.rsi_low)
+		rsi_line = rsi.algorithm(prices)
 
 		return [*bb_data, rsi_line]
 
@@ -27,7 +26,6 @@ class Algorithm:
 
 		upper_bands, _, lower_bands, rsi_line = data  #middle bands not needed && corrected bollinger bands from upper, lowe, middle to current
 		if (lower_bands[-1] >= price) & (self.rsi_low >= rsi_line[-1]):
-
 			return 'buy', 1
 
 		if (upper_bands[-1] <= price) & (self.rsi_high <= rsi_line[-1]):
@@ -50,8 +48,8 @@ class Algorithm:
 		plt.scatter(timestamps[lower_condition], sliced_prices[lower_condition], color=colors.lower())
 
 		plt.subplot(gs[-1, :])
-		RSI = RSI_algorithm(window_size=self.rsi_window_size)
-		RSI.plot(prices, timestamps)
+		rsi = RSI(window_size=self.rsi_window_size)
+		rsi.plot(prices, timestamps)
 		plt.subplot(gs[-2, :])
-		Bollinger_Bands = BB_algorithm(window_size=self.bollinger_bands_window_size)
+		Bollinger_Bands = BollingerBands(window_size=self.bollinger_bands_window_size)
 		Bollinger_Bands.plot(prices, timestamps)
