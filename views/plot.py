@@ -19,6 +19,9 @@ def plot(algorithm_name):
 	interval = int(request.args.get('interval') or default_interval)
 	interactive = bool(request.args.get('interactive') or False)
 
+	if algorithm_name not in ['price', *get_algorithms()]:
+		return 'Unsupported Algorithm', 404
+
 	if interval and is_cached_interval(interval):
 		prices, timestamps, _ = get_cached_prices(interval=interval)
 	elif interval and is_supported_interval(interval):
@@ -27,9 +30,6 @@ def plot(algorithm_name):
 		prices, timestamps, _ = get_cached_prices()
 	else:
 		return 'Unsupported Interval', 400
-
-	if algorithm_name not in ['price', *get_algorithms()]:
-		return 'Unsupported Algorithm', 404
 
 	# Even out timestamps so plotting algos works
 	timestamps = timestamps.astype('datetime64[s]')

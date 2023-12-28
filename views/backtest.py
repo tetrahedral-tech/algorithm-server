@@ -11,6 +11,9 @@ def backtest_view(algorithm_name):
 	interval = int(request.args.get('interval') or default_interval)
 	plot_bool = bool(request.args.get('plot') or False)
 
+	if algorithm_name not in [*get_algorithms()]:
+		return 'Unsupported Algorithm', 404
+
 	if interval and is_cached_interval(interval):
 		prices, _, _ = get_cached_prices(interval=interval)
 	elif interval and is_supported_interval(interval):
@@ -19,9 +22,6 @@ def backtest_view(algorithm_name):
 		prices, _, _ = get_cached_prices()
 	else:
 		return 'Unsupported Interval', 400
-
-	if algorithm_name not in [*get_algorithms()]:
-		return 'Unsupported Algorithm', 404
 
 	if plot_bool:
 		return plot(backtest(algorithm_name, prices, plot=plot_bool))
