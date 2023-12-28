@@ -4,6 +4,7 @@ import numpy as np
 from talib import MACD, EMA
 
 class Algorithm:
+
 	def __init__(self, fastperiod=12, slowperiod=26, signalperiod=9):
 		self.fastperiod, self.slowperiod, self.signalperiod = fastperiod, slowperiod, signalperiod
 
