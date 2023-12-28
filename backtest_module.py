@@ -5,7 +5,7 @@ from matplotlib.gridspec import GridSpec
 from plots import colors
 import io
 
-def backtest(algorithm, prices, balance=200, strength_to_usd=200, plot=False):  
+def backtest(algorithm, prices, balance=200, strength_to_usd=200, plot=False):
 	transactions = []
 	start_balance = balance
 	shares = 0
@@ -32,13 +32,12 @@ def backtest(algorithm, prices, balance=200, strength_to_usd=200, plot=False):
 					shares = 0
 
 			transactions.append({
-				'price': price,
-				'signal': singal,
-				'strength': strength,
-				'current_balance': balance,
-				'current_shares': shares
+			  'price': price,
+			  'signal': singal,
+			  'strength': strength,
+			  'current_balance': balance,
+			  'current_shares': shares
 			})
-
 
 	return {
 	  'transactions': np.array(transactions) if plot else transactions,
