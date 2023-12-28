@@ -1,4 +1,4 @@
-import jwt, os, io
+import jwt, os, io, numpy as np
 import matplotlib.pyplot as plt
 from pymongo.server_api import ServerApi
 from pymongo import MongoClient
@@ -43,3 +43,9 @@ def svg_plot():
 	svg_buffer.close()
 
 	return plot_data
+
+def interpolate_timestamps(timestamps, interval, datetime_type='s'):
+	timestamps = np.array(timestamps, dtype='datetime64[s]')
+	interval_timedelta = np.timedelta64(interval, 'm')
+	timestamps = np.arange(timestamps[-1] - interval_timedelta * timestamps.shape[0], timestamps[-1], interval_timedelta)
+	return timestamps
