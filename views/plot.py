@@ -1,7 +1,6 @@
 from price import get_prices, get_default_interval, get_cached_prices, is_cached_interval, is_supported_interval
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-import numpy as np
 from importlib import import_module
 from utils import get_algorithms, svg_plot
 from plots.styling import style_plots
@@ -29,11 +28,6 @@ def plot(algorithm):
 
 	if algorithm not in ['price', *get_algorithms()]:
 		return 'Unsupported Algorithm', 404
-
-	# Even out timestamps so plotting algos works
-	timestamps = timestamps.astype('datetime64[s]')
-	interval_timedelta = np.timedelta64(default_interval, 'm')
-	timestamps = np.arange(timestamps[-1] - interval_timedelta * timestamps.shape[0], timestamps[-1], interval_timedelta)
 
 	figure = plt.figure()
 
