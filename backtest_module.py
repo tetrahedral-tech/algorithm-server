@@ -5,59 +5,51 @@ from matplotlib.gridspec import GridSpec
 from plots import colors
 import io
 
-def backtest(algorithm,
-             prices,
-             balance=200,
-             strength_to_usd=190,
-             plot=False):  #TODO @fou3fou3 fix prices list with algos IndexError , ValueError
+def backtest(algorithm, prices, balance=200, strength_to_usd=200, plot=False):  
 	transactions = []
 	start_balance = balance
 	shares = 0
 
-	for price in enumerate(prices):
-		try:
-			singal, strength = algorithm_output(algorithm, prices[0:price[0]], backtest=True)
-			usd_amount = strength * strength_to_usd
-			shares_amount = usd_amount / price[1]
+	for index, price in enumerate(prices, 1):
+		singal, strength = algorithm_output(algorithm, prices[0:index], backtest=True)
+		usd_amount = strength * strength_to_usd
+		shares_amount = usd_amount / price
 
-			if singal in ['buy', 'sell']:
-				if singal == 'buy':
-					if balance >= usd_amount:
-						balance -= usd_amount
-						shares += shares_amount
-					else:
-						shares += balance / price[1]
-						balance = 0
+		if singal in ['buy', 'sell']:
+			if singal == 'buy':
+				if balance >= usd_amount:
+					balance -= usd_amount
+					shares += shares_amount
+				else:
+					shares += balance / price
+					balance = 0
+			elif singal == 'sell':
+				if shares >= shares_amount:
+					balance += usd_amount
+					shares -= shares_amount
+				else:
+					balance += shares * price
+					shares = 0
 
-				elif singal == 'sell':
-					if shares >= shares_amount:
-						balance += usd_amount
-						shares -= shares_amount
-					else:
-						balance += shares * price[1]
-						shares = 0
+			transactions.append({
+				'price': price,
+				'signal': singal,
+				'strength': strength,
+				'current_balance': balance,
+				'current_shares': shares
+			})
 
-				transactions.append({
-				  'price': price[1],
-				  'signal': singal,
-				  'strength': strength,
-				  'current_balance': balance,
-				  'current_shares': shares
-				})
-
-		except (IndexError, ValueError):
-			pass
 
 	return {
 	  'transactions': np.array(transactions) if plot else transactions,
 	  'algorithm': algorithm,
 	  'balance': balance,
 	  'start_balance': start_balance,
-	  'final_total': balance + shares * price[1],
+	  'final_total': balance + shares * price,
 	  'strength_to_usd': strength_to_usd,
 	  'shares': shares,
-	  'profit': (balance + shares * price[1]) - start_balance,
-	  'profit_percentage %': ((balance + shares * price[1]) - start_balance) / start_balance
+	  'profit': (balance + shares * price) - start_balance,
+	  'profit_percentage %': ((balance + shares * price) - start_balance) / start_balance
 	}
 
 def plot(back_test_data):
