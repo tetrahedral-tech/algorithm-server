@@ -34,7 +34,7 @@ The trading logic is implemented in a Flask web application that serves as an AP
 ### Prerequisites
 
 - Python 3.10 and higher
-- Install required Python packages: `conda activate auto-trading && conda env update -n my_env --file environment.yml` on linux/unix
+- Install required Python packages: `conda activate auto-trading && conda env update -n auto-trading --file environment.yml` on linux/unix
 - Install redis using: `sudo apt-get update && sudo apt-get install redis `
 
 ### Configuration
