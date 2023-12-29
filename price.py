@@ -79,7 +79,8 @@ def get_cached_prices(interval='default'):
 # Price Caching On Redis DataBase
 def update_cached_prices(log=True):
 	for interval in cached_intervals:
-		if log : print(f'Caching prices for {interval}')
+		if log:
+			print(f'Caching prices for {interval}')
 		prices, timestamps, last_complete_point = get_prices(interval=interval)
 
 		redis.delete(f'prices:{interval}')
