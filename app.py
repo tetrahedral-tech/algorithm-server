@@ -37,5 +37,4 @@ if __name__ == '__main__':
 	app.run()
 
 def get_app():
-	start_price_cache()
 	return app

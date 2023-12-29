@@ -124,8 +124,23 @@ class TestApp(unittest.TestCase):
 				#test plot_response
 				plot_response = app_client.get(f'/backtest/{algorithm}?interval={interval}')
 				self.assertEqual(plot_response.status_code, 200)
-				time.sleep(5)
-			time.sleep(5)  #Solved to many requests from kraken
+				time.sleep(2)
+
+			#Test internal checker authorization and results
+			authorization_data = {
+			  'Authorization':
+			    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzZXJ2ZXIiOiJzZXJ2ZXIiLCJuYW1lIjoiSm9obiBEb2UiLCJpYXQiOjE1MTYyMzkwMjJ9.RuVgthZMSmoZQHuDVPioxWm6J8MjubpJXTbxamhAU44'
+			}
+			internal_checker_response = app_client.get('/internal_checker', headers=authorization_data)
+			self.assertEqual(internal_checker_response.status_code, 200)
+			for algorithm in utils.get_algorithms():
+				self.assertIn(algorithm, internal_checker_response.json['algorithms'])
+
+			#Check internal checker response to false
+			internal_checker_response = app_client.get('/internal_checker', headers={'not_correct': 'not_correct'})
+			self.assertEqual(internal_checker_response.status_code, 401)
+
+			time.sleep(2)  #Solved to many requests from kraken
 
 if __name__ == '__main__':
 	unittest.main()
