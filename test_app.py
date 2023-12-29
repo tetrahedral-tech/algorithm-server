@@ -46,7 +46,16 @@ class TestApp(unittest.TestCase):
 		self.assertIsNotNone(backtest_data)
 		self.assertCountEqual(backtest_dict.keys(), backtest_data.keys())
 		#Test transactions keys are correct and and transactions exsits
-		transactions_dict = {'price': price, 'signal': 'signal', 'strength': 1, 'current_balance': 1, 'current_shares': 1, 'timestamp':1}
+
+		transactions_dict = {
+		  'price': price,
+		  'signal': 'signal',
+		  'strength': 1,
+		  'current_balance': 1,
+		  'current_shares': 1,
+		  'timestamp': 1
+		}
+
 		transactions = backtest_data['transactions'][0]  #take the first transaction of transactions list
 		self.assertIsNotNone(transactions_dict)
 		self.assertCountEqual(transactions_dict.keys(), transactions.keys())
@@ -117,6 +126,7 @@ class TestApp(unittest.TestCase):
 				self.assertEqual(plot_response.status_code, 200)
 				time.sleep(5)
 			time.sleep(5) #Solved to many requests from kraken
+
 
 if __name__ == '__main__':
 	unittest.main()
