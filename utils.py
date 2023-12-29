@@ -28,13 +28,13 @@ def authorize_server(encoded):
 
 	return decoded
 
-def algorithm_output(algorithm, prices, backtest=False):
-	module = import_module(f'algorithms.{algorithm}').Algorithm()
+def algorithm_output(algorithm_name, prices, backtest=False):
+	module = import_module(f'algorithms.{algorithm_name}').Algorithm()
 	signal, strength = module.signal(prices, module.algorithm(prices))
 	if backtest:
 		return signal, strength
 
-	return algorithm, (signal, strength)
+	return algorithm_name, (signal, strength)
 
 def svg_plot():
 	svg_buffer = io.StringIO()

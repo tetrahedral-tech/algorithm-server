@@ -7,8 +7,7 @@ from price import get_prices, get_default_interval, is_cached_interval, get_cach
 mpl.use('Agg')
 
 def backtest_view(algorithm_name):
-	default_interval = get_default_interval()
-	interval = int(request.args.get('interval') or default_interval)
+	interval = int(request.args.get('interval') or get_default_interval())
 	plot_bool = bool(request.args.get('plot') or False)
 
 	if algorithm_name not in [*get_algorithms()]:
