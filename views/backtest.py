@@ -1,5 +1,5 @@
 import matplotlib as mpl
-from backtest import backtest, plot
+from backtest_module import backtest, plot
 from utils import get_algorithms
 from flask import request
 from price import get_prices, get_default_interval, is_cached_interval, get_cached_prices, is_supported_interval
