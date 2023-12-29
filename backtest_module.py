@@ -5,7 +5,7 @@ from matplotlib.gridspec import GridSpec
 from plots import colors
 import io
 
-def backtest(algorithm, prices, balance=200, strength_to_usd=200, plot=False):
+def backtest(algorithm, prices, timestamps, balance=200, strength_to_usd=200, plot=False):
 	transactions = []
 	start_balance = balance
 	shares = 0
