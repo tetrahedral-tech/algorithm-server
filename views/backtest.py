@@ -26,4 +26,4 @@ def backtest_view(algorithm_name):
 	if plot_bool:
 		return plot(backtest(algorithm_name, prices, timestamps, plot=plot_bool))
 
-	return backtest(algorithm_name, prices)
+	return backtest(algorithm_name, prices, timestamps)

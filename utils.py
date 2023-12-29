@@ -1,6 +1,7 @@
 import jwt, os, io, numpy as np
 import matplotlib.pyplot as plt
 from pymongo.server_api import ServerApi
+from datetime import datetime
 from pymongo import MongoClient
 from dotenv import load_dotenv
 from importlib import import_module
@@ -44,8 +45,14 @@ def svg_plot():
 
 	return plot_data
 
-def interpolate_timestamps(timestamps, interval, datetime_type='s'):
-	timestamps = np.array(timestamps, dtype='datetime64[s]')
-	interval_timedelta = np.timedelta64(interval, 'm')
-	timestamps = np.arange(timestamps[-1] - interval_timedelta * timestamps.shape[0], timestamps[-1], interval_timedelta)
-	return timestamps
+def interpolate_timestamps(timestamps, interval):
+		timestamps = np.array(timestamps, dtype='float64')  # Convert to float
+		interval_seconds = interval * 60  # Convert minutes to seconds
+    
+    # Calculate the number of intervals needed
+		num_intervals = int((timestamps[-1] - timestamps[0]) / interval_seconds) + 1
+    
+    # Generate new timestamps using np.arange
+		new_timestamps = np.arange(timestamps[0], timestamps[0] + num_intervals * interval_seconds, interval_seconds)
+    
+		return new_timestamps
