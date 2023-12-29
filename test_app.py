@@ -63,6 +63,7 @@ class TestApp(unittest.TestCase):
 		self.assertTrue(type(backtest_data['profit']), int)
 		self.assertTrue(type(backtest_data['profit_percentage %']), int)
 
+	#Test backtest_plot function
 	def test_backtest_plot(self):
 		backtest_plot_data = backtest_module.backtest('bollinger_bands', price.get_prices()[0], plot=True)
 		#Test back test data keys are correct and backtest data exsits
@@ -82,6 +83,7 @@ class TestApp(unittest.TestCase):
 		backtest_plot = backtest_module.plot(backtest_plot_data)
 		self.assertIsNotNone(backtest_plot)
 
+	#Test app views
 	def test_views(self):
 		application = app.get_app()
 		app_client = application.test_client()
