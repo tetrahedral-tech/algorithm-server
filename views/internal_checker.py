@@ -1,7 +1,7 @@
 import os
 from flask import request
 from redis import from_url
-from price import get_prices
+from price import get_prices, get_default_interval, is_supported_interval, get_cached_prices, is_supported_interval, is_cached_interval
 from ipaddress import ip_address
 from utils import authorize_server, get_algorithms, algorithm_output
 
@@ -18,7 +18,17 @@ def internal_checker():
 	except Exception:
 		return 'Unauthorized', 401
 
-	prices, _, last_complete_point = get_prices()
+	interval = int(request.args.get('interval') or get_default_interval())
+
+	if interval and is_cached_interval(interval):
+		prices, _, last_complete_point = get_cached_prices(interval=interval)
+	elif interval and is_supported_interval(interval):
+		prices, _, last_complete_point = get_prices(interval=interval)
+	elif not interval:
+		prices, _, last_complete_point = get_cached_prices()
+	else:
+		return 'Unsupported Interval', 400
+
 	new_datapoint = last_complete_point > last_checked_point
 	if new_datapoint:
 		last_checked_point = last_complete_point

@@ -14,8 +14,7 @@ figure_size = mpl.rcParams['figure.figsize']
 figure_size[0] = figure_size[0] * 1.5
 
 def plot(algorithm_name):
-	default_interval = get_default_interval()
-	interval = int(request.args.get('interval') or default_interval)
+	interval = int(request.args.get('interval') or get_default_interval())
 	interactive = bool(request.args.get('interactive') or False)
 
 	if algorithm_name not in ['price', *get_algorithms()]:
@@ -32,7 +31,7 @@ def plot(algorithm_name):
 
 	# Even out timestamps so plotting algos works
 	timestamps = timestamps.astype('datetime64[s]')
-	interval_timedelta = np.timedelta64(default_interval, 'm')
+	interval_timedelta = np.timedelta64(interval, 'm')
 	timestamps = np.arange(timestamps[-1] - interval_timedelta * timestamps.shape[0], timestamps[-1], interval_timedelta)
 
 	figure = plt.figure()
