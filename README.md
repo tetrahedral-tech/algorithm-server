@@ -1,4 +1,4 @@
-# Auto Trading Project
+# Auto Trading Project (Algorithm-Server)
 
 ## Overview
 
