@@ -31,10 +31,6 @@ def plot(algorithm_name):
 	else:
 		return 'Unsupported Interval', 400
 
-
-	if algorithm not in ['price', *get_algorithms()]:
-		return 'Unsupported Algorithm', 404
-
 	# Even out timestamps so plotting algos works
 	timestamps = timestamps.astype('datetime64[s]')
 	interval_timedelta = np.timedelta64(default_interval, 'm')

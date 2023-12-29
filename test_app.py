@@ -1,5 +1,5 @@
 import unittest
-import price, utils, backtest_module, app
+import price, utils, backtest_module, app, time
 
 class TestApp(unittest.TestCase):
 	#Test price.py
@@ -115,6 +115,8 @@ class TestApp(unittest.TestCase):
 				#test plot_response
 				plot_response = app_client.get(f'/backtest/{algorithm}?interval={interval}')
 				self.assertEqual(plot_response.status_code, 200)
+				time.sleep(5)
+			time.sleep(5) #Solved to many requests from kraken
 
 if __name__ == '__main__':
 	unittest.main()
