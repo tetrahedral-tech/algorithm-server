@@ -125,8 +125,7 @@ class TestApp(unittest.TestCase):
 				plot_response = app_client.get(f'/backtest/{algorithm}?interval={interval}')
 				self.assertEqual(plot_response.status_code, 200)
 				time.sleep(5)
-			time.sleep(5) #Solved to many requests from kraken
-
+			time.sleep(5)  #Solved to many requests from kraken
 
 if __name__ == '__main__':
 	unittest.main()

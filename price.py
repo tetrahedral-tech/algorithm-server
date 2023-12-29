@@ -75,7 +75,8 @@ def get_cached_prices(interval='default'):
 	if len(prices) < 1:
 		return np.zeros(point_count), np.zeros(point_count), 0
 
-	return np.array(prices).astype(float), interpolate_timestamps(timestamps, interval).astype(float), int(last_complete_point)
+	return np.array(prices).astype(float), interpolate_timestamps(timestamps,
+	                                                              interval).astype(float), int(last_complete_point)
 
 # Price Caching On Redis DataBase
 def update_cached_prices(log=True):

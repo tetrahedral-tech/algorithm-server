@@ -8,7 +8,6 @@ from plots.styling import style_plots
 from mpld3 import fig_to_html
 from flask import request
 
-
 mpl.use('Agg')
 
 figure_size = mpl.rcParams['figure.figsize']
@@ -46,5 +45,5 @@ def plot(algorithm_name):
 
 	style_plots(interval)
 
-		# @TODO change d3 and mpld3 urls to local ones
+	# @TODO change d3 and mpld3 urls to local ones
 	return fig_to_html(figure) if interactive else svg_plot()

@@ -15,7 +15,7 @@ def style_plots(interval=0, dates=True):
 				xfmt = md.DateFormatter('%Y')
 			elif interval >= 1440:
 				xfmt = md.DateFormatter('%y/%m')
-			elif interval >= 240 or interval == 0: 
+			elif interval >= 240 or interval == 0:
 				xfmt = md.DateFormatter('%m/%d')
 			elif interval >= 15:
 				xfmt = md.DateFormatter('%d')
