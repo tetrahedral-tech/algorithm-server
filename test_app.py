@@ -15,36 +15,38 @@ class TestApp(unittest.TestCase):
 		#Test get prices using is not none
 		self.assertIsNotNone(price.get_prices())
 		#Test get cached prices using is not none
-		self.assertIsNotNone(price.get_cached_prices()) 
+		self.assertIsNotNone(price.get_cached_prices())
 		#Test update cached prices using is none
-		self.assertIsNone(price.update_cached_prices(log=False)) #log is set to False so getting cached print dont get displayed
+		self.assertIsNone(
+		  price.update_cached_prices(log=False))  #log is set to False so getting cached print dont get displayed
 
 	#Test utils.py
 	def test_utils(self):
 		#Test if bollinger_bands in get algorithms (True)
 		self.assertTrue('bollinger_bands' in utils.get_algorithms())
 		#Test if bollinger_bands returns TypeError if given a non-numpy list type
-		self.assertRaises(TypeError ,utils.algorithm_output, 'bollinger_bands', [1,2,3], backtest=True)	
+		self.assertRaises(TypeError, utils.algorithm_output, 'bollinger_bands', [1, 2, 3], backtest=True)
 
 	#Test backtest_module.py
 	def test_backtest(self):
 		backtest_data = backtest_module.backtest('bollinger_bands', price.get_prices()[0])
 		#Test back test data keys are correct and backtest data exsits
-		backtest_dict = { 
-      'transactions': [], 
-      'algorithm': 'bollinger_bands', 
-      'balance':1, 'start_balance':1, 
-      'final_total':1, 
-      'strength_to_usd':1, 
-      'shares':1, 
-      'profit':1, 
-      'profit_percentage %':1 
-    }
+		backtest_dict = {
+		  'transactions': [],
+		  'algorithm': 'bollinger_bands',
+		  'balance': 1,
+		  'start_balance': 1,
+		  'final_total': 1,
+		  'strength_to_usd': 1,
+		  'shares': 1,
+		  'profit': 1,
+		  'profit_percentage %': 1
+		}
 		self.assertIsNotNone(backtest_data)
 		self.assertCountEqual(backtest_dict.keys(), backtest_data.keys())
 		#Test transactions keys are correct and and transactions exsits
 		transactions_dict = {'price': price, 'signal': 'signal', 'strength': 1, 'current_balance': 1, 'current_shares': 1}
-		transactions = backtest_data['transactions'][0] #take the first transaction of transactions list
+		transactions = backtest_data['transactions'][0]  #take the first transaction of transactions list
 		self.assertIsNotNone(transactions_dict)
 		self.assertCountEqual(transactions_dict.keys(), transactions.keys())
 		#Test if algorithm is correct (using bollinger bands change whenever needed) and algorithm variable exsits
@@ -66,16 +68,17 @@ class TestApp(unittest.TestCase):
 	def test_backtest_plot(self):
 		backtest_plot_data = backtest_module.backtest('bollinger_bands', price.get_prices()[0], plot=True)
 		#Test back test data keys are correct and backtest data exsits
-		backtest_dict = { 
-      'transactions': [], 
-      'algorithm': 'bollinger_bands', 
-      'balance':1, 'start_balance':1, 
-      'final_total':1, 
-      'strength_to_usd':1, 
-      'shares':1, 
-      'profit':1, 
-      'profit_percentage %':1 
-    }
+		backtest_dict = {
+		  'transactions': [],
+		  'algorithm': 'bollinger_bands',
+		  'balance': 1,
+		  'start_balance': 1,
+		  'final_total': 1,
+		  'strength_to_usd': 1,
+		  'shares': 1,
+		  'profit': 1,
+		  'profit_percentage %': 1
+		}
 		self.assertIsNotNone(backtest_plot_data)
 		self.assertCountEqual(backtest_dict.keys(), backtest_plot_data.keys())
 		#Test if backtest plot exsits and not raising any errors
@@ -102,14 +105,12 @@ class TestApp(unittest.TestCase):
 				self.assertIn(b'shares', backtest_response.data)
 				self.assertIn(b'profit', backtest_response.data)
 				self.assertIn(b'profit_percentage %', backtest_response.data)
-				#test backtest_plot_response	
+				#test backtest_plot_response
 				backtest_plot_response = app_client.get(f'/backtest/{algorithm}?interval={interval}')
 				self.assertEqual(backtest_plot_response.status_code, 200)
 				#test plot_response
 				plot_response = app_client.get(f'/backtest/{algorithm}?interval={interval}')
 				self.assertEqual(plot_response.status_code, 200)
-
-
 
 if __name__ == '__main__':
 	unittest.main()
