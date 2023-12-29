@@ -37,7 +37,7 @@ def backtest(algorithm, prices, timestamps, balance=200, strength_to_usd=200, pl
 			  'strength': strength,
 			  'current_balance': balance,
 			  'current_shares': shares,
-				'timestamp': timestamps[index-1]
+			  'timestamp': timestamps[index - 1]
 			})
 
 	return {
@@ -62,7 +62,6 @@ def plot(back_test_data):
 
 	plt.subplot(gs[0, :])
 	plt.plot(timestamps, balances, color=colors.primary())
-
 
 	buy_signals = np.where(np.array(signals) == 'buy')[0]
 	plt.scatter(buy_signals, [balances[i] for i in buy_signals], color=colors.lower())
