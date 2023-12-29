@@ -1,5 +1,5 @@
 import unittest
-import price, utils, backtest_module
+import price, utils, backtest_module, app
 
 class TestApp(unittest.TestCase):
 	#Test price.py
@@ -81,6 +81,35 @@ class TestApp(unittest.TestCase):
 		#Test if backtest plot exsits and not raising any errors
 		backtest_plot = backtest_module.plot(backtest_plot_data)
 		self.assertIsNotNone(backtest_plot)
+
+	def test_views(self):
+		application = app.get_app()
+		app_client = application.test_client()
+		intervals = price.supported_intervals
+		algorithms = utils.get_algorithms()
+		#Test backtest && backtest plot && plot views
+		for algorithm in algorithms:
+			for interval in intervals:
+				#fully test backtest_response
+				backtest_response = app_client.get(f'/backtest/{algorithm}?interval={interval}')
+				self.assertEqual(backtest_response.status_code, 200)
+				self.assertIn(b'transactions', backtest_response.data)
+				self.assertIn(b'algorithm', backtest_response.data)
+				self.assertIn(b'balance', backtest_response.data)
+				self.assertIn(b'start_balance', backtest_response.data)
+				self.assertIn(b'final_total', backtest_response.data)
+				self.assertIn(b'strength_to_usd', backtest_response.data)
+				self.assertIn(b'shares', backtest_response.data)
+				self.assertIn(b'profit', backtest_response.data)
+				self.assertIn(b'profit_percentage %', backtest_response.data)
+				#test backtest_plot_response	
+				backtest_plot_response = app_client.get(f'/backtest/{algorithm}?interval={interval}')
+				self.assertEqual(backtest_plot_response.status_code, 200)
+				#test plot_response
+				plot_response = app_client.get(f'/backtest/{algorithm}?interval={interval}')
+				self.assertEqual(plot_response.status_code, 200)
+
+
 
 if __name__ == '__main__':
 	unittest.main()
