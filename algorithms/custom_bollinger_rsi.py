@@ -1,46 +1,55 @@
-from .bollinger_bands import algorithm as bollinger_bands
-from .rsi import algorithm as rsi
+from .bollinger_bands import Algorithm as BollingerBands
+from .rsi import Algorithm as RSI
 import matplotlib.pyplot as plt
 import plots.colors as colors
 from matplotlib.gridspec import GridSpec
-from algorithms.rsi import plot as rsi_plot
-from algorithms.bollinger_bands import plot as bollinger_bands_plot
 
-def algorithm(prices, window_size_rsi=13, window_size_bollinger_bands=30):
-	bb_data = bollinger_bands(prices, window_size=window_size_bollinger_bands)
-	rsi_line = rsi(prices, window_size=window_size_rsi)
+class Algorithm:
 
-	return [*bb_data, rsi_line]
+	def __init__(self, rsi_window_size=13, bollinger_bands_window_size=20, rsi_high=70, rsi_low=30):
+		self.rsi_window_size = rsi_window_size
+		self.rsi_high = rsi_high
+		self.rsi_low = rsi_low
+		self.bollinger_bands_window_size = bollinger_bands_window_size
+		self.window_size = max(rsi_window_size, bollinger_bands_window_size)
 
-def signal(prices, data):
-	price = prices[-1]
-	upper_bands, lower_bands, _, rsi_line = data  # _ is for optomization because the middle band will not be used
+	def algorithm(self, prices):
+		Bollinger_Bands = BollingerBands(window_size=self.bollinger_bands_window_size)
+		bb_data = Bollinger_Bands.algorithm(prices)
+		rsi = RSI(window_size=self.rsi_window_size, high=self.rsi_high, low=self.rsi_low)
+		rsi_line = rsi.algorithm(prices)
 
-	if lower_bands[-1] >= price and 30 >= rsi_line[-1]:
-		return 'buy', 1
+		return [*bb_data, rsi_line]
 
-	if price >= upper_bands[-1] and rsi_line[-1] >= 70:
-		return 'sell', 1
+	def signal(self, prices, data):
+		price = prices[-1]
 
-	return 'no_action', 0
+		upper_bands, _, lower_bands, rsi_line = data  #middle bands not needed && corrected bollinger bands from upper, lowe, middle to current
+		if (lower_bands[-1] >= price) & (self.rsi_low >= rsi_line[-1]):
+			return 'buy', 1
 
-def plot(prices, timestamps, **kwargs):
-	gs = GridSpec(3, 1, figure=plt.gcf())
+		if (upper_bands[-1] <= price) & (self.rsi_high <= rsi_line[-1]):
+			return 'sell', 0.5
 
-	plt.subplot(gs[0, :])
-	plt.plot(timestamps, prices, color=colors.primary())
+		return 'no_action', 0
 
-	upper_bands, _, lower_bands, rsi_line = algorithm(prices, **kwargs)
-	sliced_prices = prices[:min(upper_bands.shape[0], rsi_line.shape[0])]
+	def plot(self, prices, timestamps, **kwargs):
+		gs = GridSpec(3, 1, figure=plt.gcf())
 
-	upper_condition = (prices >= upper_bands) & (rsi_line >= 70)
-	lower_condition = (lower_bands >= prices) & (30 >= rsi_line)
-	plt.scatter(timestamps[upper_condition], sliced_prices[upper_condition], color=colors.upper())
-	plt.scatter(timestamps[lower_condition], sliced_prices[lower_condition], color=colors.lower())
+		plt.subplot(gs[0, :])
+		plt.plot(timestamps, prices, color=colors.primary())
 
-	plt.subplot(gs[-1, :])
-	rsi_plot(prices, timestamps)
-	plt.subplot(gs[-2, :])
-	bollinger_bands_plot(prices, timestamps)
+		upper_bands, _, lower_bands, rsi_line = self.algorithm(prices, **kwargs)
+		sliced_prices = prices[:min(upper_bands.shape[0], rsi_line.shape[0])]
 
-	return plt
+		upper_condition = (prices >= upper_bands) & (rsi_line >= self.rsi_high)
+		lower_condition = (lower_bands >= prices) & (self.rsi_low >= rsi_line)
+		plt.scatter(timestamps[upper_condition], sliced_prices[upper_condition], color=colors.upper())
+		plt.scatter(timestamps[lower_condition], sliced_prices[lower_condition], color=colors.lower())
+
+		plt.subplot(gs[-1, :])
+		rsi = RSI(window_size=self.rsi_window_size)
+		rsi.plot(prices, timestamps)
+		plt.subplot(gs[-2, :])
+		Bollinger_Bands = BollingerBands(window_size=self.bollinger_bands_window_size)
+		Bollinger_Bands.plot(prices, timestamps)

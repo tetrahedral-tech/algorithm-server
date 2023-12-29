@@ -6,10 +6,13 @@ from price import get_prices, get_default_interval, is_cached_interval, get_cach
 
 mpl.use('Agg')
 
-def backtest_view(algorithm):
+def backtest_view(algorithm_name):
 	default_interval = get_default_interval()
 	interval = int(request.args.get('interval') or default_interval)
 	plot_bool = bool(request.args.get('plot') or False)
+
+	if algorithm_name not in [*get_algorithms()]:
+		return 'Unsupported Algorithm', 404
 
 	if interval and is_cached_interval(interval):
 		prices, timestamps, _ = get_cached_prices(interval=interval)
@@ -20,10 +23,7 @@ def backtest_view(algorithm):
 	else:
 		return 'Unsupported Interval', 400
 
-	if algorithm not in ['price', *get_algorithms()]:
-		return 'Unsupported Algorithm', 404
-
 	if plot_bool:
-		return plot(backtest(algorithm, prices, timestamps))
+		return plot(backtest(algorithm_name, prices, timestamps, plot=plot_bool))
 
-	return backtest(algorithm, prices, timestamps)
+	return backtest(algorithm_name, prices)
