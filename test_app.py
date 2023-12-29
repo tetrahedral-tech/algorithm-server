@@ -29,7 +29,8 @@ class TestApp(unittest.TestCase):
 
 	#Test backtest_module.py
 	def test_backtest(self):
-		backtest_data = backtest_module.backtest('bollinger_bands', price.get_prices()[0])
+		prices, timestamps, _ = price.get_prices()
+		backtest_data = backtest_module.backtest('bollinger_bands', prices, timestamps)
 		#Test back test data keys are correct and backtest data exsits
 		backtest_dict = {
 		  'transactions': [],
@@ -45,7 +46,7 @@ class TestApp(unittest.TestCase):
 		self.assertIsNotNone(backtest_data)
 		self.assertCountEqual(backtest_dict.keys(), backtest_data.keys())
 		#Test transactions keys are correct and and transactions exsits
-		transactions_dict = {'price': price, 'signal': 'signal', 'strength': 1, 'current_balance': 1, 'current_shares': 1}
+		transactions_dict = {'price': price, 'signal': 'signal', 'strength': 1, 'current_balance': 1, 'current_shares': 1, 'timestamp':1}
 		transactions = backtest_data['transactions'][0]  #take the first transaction of transactions list
 		self.assertIsNotNone(transactions_dict)
 		self.assertCountEqual(transactions_dict.keys(), transactions.keys())
@@ -67,7 +68,8 @@ class TestApp(unittest.TestCase):
 
 	#Test backtest_plot function
 	def test_backtest_plot(self):
-		backtest_plot_data = backtest_module.backtest('bollinger_bands', price.get_prices()[0], plot=True)
+		prices, timestamps, _ = price.get_prices()
+		backtest_plot_data = backtest_module.backtest('bollinger_bands', prices, timestamps, plot=True)
 		#Test back test data keys are correct and backtest data exsits
 		backtest_dict = {
 		  'transactions': [],

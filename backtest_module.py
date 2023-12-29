@@ -37,7 +37,7 @@ def backtest(algorithm, prices, timestamps, balance=200, strength_to_usd=200, pl
 			  'strength': strength,
 			  'current_balance': balance,
 			  'current_shares': shares,
-				'timestamp': timestamps[index]
+				'timestamp': timestamps[index-1]
 			})
 
 	return {
