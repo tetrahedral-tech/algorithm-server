@@ -7,16 +7,16 @@ def secondary():
 def tertiary():
 	return 'mediumorchid'
 
-def upper():
+def sell():
 	return 'lightcoral'
 
-def uppersecondary():
+def sellsecondary():
 	return 'indianred'
 
-def lower():
+def buy():
 	return 'darkturquoise'
 
-def lowersecondary():
+def buysecondary():
 	return 'skyblue'
 
 def inner():

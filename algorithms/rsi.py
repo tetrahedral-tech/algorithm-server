@@ -37,14 +37,14 @@ class Algorithm:
 		# Thresholds
 		upper = np.full(rsi_line.shape, self.high)
 		lower = np.full(rsi_line.shape, self.low)
-		upper_condition = rsi_line >= self.high
-		lower_condition = rsi_line <= self.low
+		sell_condition = rsi_line >= self.high
+		buy_condition = rsi_line <= self.low
 
 		plt.fill_between(timestamps, upper, lower, color='grey', alpha=0.3)
-		plt.plot(timestamps, upper, linestyle='dashed', color=colors.upper())
-		plt.plot(timestamps, lower, linestyle='dashed', color=colors.lower())
+		plt.plot(timestamps, upper, linestyle='dashed', color=colors.sell())
+		plt.plot(timestamps, lower, linestyle='dashed', color=colors.buy())
 
 		plt.subplot(gs[1, :])
 		plt.plot(timestamps, prices, color=colors.primary())
-		plt.scatter(timestamps[upper_condition], prices[upper_condition], color=colors.upper())
-		plt.scatter(timestamps[lower_condition], prices[lower_condition], color=colors.lower())
+		plt.scatter(timestamps[sell_condition], prices[sell_condition], color=colors.sell())
+		plt.scatter(timestamps[buy_condition], prices[buy_condition], color=colors.buy())
