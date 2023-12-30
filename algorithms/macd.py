@@ -12,15 +12,14 @@ class Algorithm:
 		return MACD(prices, fastperiod=self.fastperiod, slowperiod=self.slowperiod, signalperiod=self.signalperiod)
 
 	def signal(self, _, data):
-		macd, signal, histogram = data
+		macds, signals, histogram = data
 		positive_histogram = np.abs(histogram)
 		histogram_max = np.max(np.nan_to_num(positive_histogram))
 
-		if macd[-1] > signal[-1] and macd[-2] < signal[-2]:
-			return 'buy', positive_histogram[-1] / histogram_max
-		elif macd[-1] < signal[-1] and macd[-2] > signal[-2]:
-			return 'sell', positive_histogram[-1] / histogram_max
-
+		if macds[-1] > signals[-1] and any(signal > macd for macd in macds[-5:-1] for signal in signals[-5:-1]):
+			return 'buy', 1
+		elif macds[-1] < signals[-1] and any(macd > signal for macd in macds[-5:-1] for signal in signals[-5:-1]):
+			return 'sell', 1
 		return 'no_action', 0
 
 	def plot(self, prices, timestamps, **kwargs):
