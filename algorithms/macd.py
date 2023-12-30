@@ -26,24 +26,24 @@ class Algorithm:
 	def plot(self, prices, timestamps, **kwargs):
 		macd, signal, histogram = self.algorithm(prices, **kwargs)
 
-		upper_condition = np.insert((macd[1:] > signal[1:]) & (macd[:-1] < signal[:-1]), 0, False)
-		lower_condition = np.insert((macd[1:] < signal[1:]) & (macd[:-1] > signal[:-1]), 0, False)
+		buy_condition = np.insert((macd[1:] > signal[1:]) & (macd[:-1] < signal[:-1]), 0, False)
+		sell_condition = np.insert((macd[1:] < signal[1:]) & (macd[:-1] > signal[:-1]), 0, False)
 
 		plt.subplot(211)
 		plt.plot(timestamps, prices, color=colors.primary())
 		plt.plot(timestamps, EMA(prices, timeperiod=12), color=colors.secondary())
 		plt.plot(timestamps, EMA(prices, timeperiod=26), color=colors.tertiary())
 
-		plt.scatter(timestamps[upper_condition], prices[upper_condition], color=colors.upper())
-		plt.scatter(timestamps[lower_condition], prices[lower_condition], color=colors.lower())
+		plt.scatter(timestamps[buy_condition], prices[buy_condition], color=colors.buy())
+		plt.scatter(timestamps[sell_condition], prices[sell_condition], color=colors.sell())
 
 		plt.subplot(212)
 		plt.plot(timestamps, macd, color=colors.primary())
 		plt.plot(timestamps, signal, color=colors.secondary())
 
-		plt.bar(timestamps[histogram >= 0], histogram[histogram >= 0], color=colors.uppersecondary())
-		plt.bar(timestamps[histogram < 0], histogram[histogram < 0], color=colors.lowersecondary())
+		plt.bar(timestamps[histogram >= 0], histogram[histogram >= 0], color=colors.buysecondary())
+		plt.bar(timestamps[histogram < 0], histogram[histogram < 0], color=colors.sellsecondary())
 		plt.plot(timestamps, np.zeros(prices.shape[0]), color=colors.inner(), linestyle='-')
 
-		plt.scatter(timestamps[upper_condition], signal[upper_condition], color=colors.upper())
-		plt.scatter(timestamps[lower_condition], signal[lower_condition], color=colors.lower())
+		plt.scatter(timestamps[buy_condition], signal[buy_condition], color=colors.buy())
+		plt.scatter(timestamps[sell_condition], signal[sell_condition], color=colors.sell())

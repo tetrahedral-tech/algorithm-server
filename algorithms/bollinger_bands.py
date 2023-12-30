@@ -32,8 +32,8 @@ class Algorithm:
 		plt.plot(timestamps, middle_bands, color=colors.secondary())
 
 		# Buy/Sell Signals
-		upper_condition = prices >= upper_bands
-		lower_condition = prices <= lower_bands
+		sell_condition = prices >= upper_bands
+		buy_condition = prices <= lower_bands
 
-		plt.scatter(timestamps[upper_condition], prices[upper_condition], color=colors.upper())
-		plt.scatter(timestamps[lower_condition], prices[lower_condition], color=colors.lower())
+		plt.scatter(timestamps[sell_condition], prices[sell_condition], color=colors.sell())
+		plt.scatter(timestamps[buy_condition], prices[buy_condition], color=colors.buy())

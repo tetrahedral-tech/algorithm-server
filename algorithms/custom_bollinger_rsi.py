@@ -42,10 +42,10 @@ class Algorithm:
 		upper_bands, _, lower_bands, rsi_line = self.algorithm(prices, **kwargs)
 		sliced_prices = prices[:min(upper_bands.shape[0], rsi_line.shape[0])]
 
-		upper_condition = (prices >= upper_bands) & (rsi_line >= self.rsi_high)
-		lower_condition = (lower_bands >= prices) & (self.rsi_low >= rsi_line)
-		plt.scatter(timestamps[upper_condition], sliced_prices[upper_condition], color=colors.upper())
-		plt.scatter(timestamps[lower_condition], sliced_prices[lower_condition], color=colors.lower())
+		sell_condition = (prices >= upper_bands) & (rsi_line >= self.rsi_high)
+		buy_condition = (lower_bands >= prices) & (self.rsi_low >= rsi_line)
+		plt.scatter(timestamps[sell_condition], sliced_prices[sell_condition], color=colors.sell())
+		plt.scatter(timestamps[buy_condition], sliced_prices[buy_condition], color=colors.buy())
 
 		plt.subplot(gs[-1, :])
 		rsi = RSI(window_size=self.rsi_window_size)

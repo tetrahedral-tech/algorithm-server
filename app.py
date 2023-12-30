@@ -34,7 +34,7 @@ def start_price_cache():
 
 if __name__ == '__main__':
 	start_price_cache()
-	app.run()
+	app.run(debug=True)
 
 def get_app():
 	return app
