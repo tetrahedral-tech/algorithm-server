@@ -17,5 +17,4 @@ class TestApp(unittest.TestCase):
 		#Test get cached prices using is not none
 		self.assertIsNotNone(get_cached_prices())
 		#Test update cached prices using is none
-		self.assertIsNone(
-			update_cached_prices(log=False))  #log is set to False so getting cached print dont get displayed
+		self.assertIsNone(update_cached_prices(log=False))  #log is set to False so getting cached print dont get displayed

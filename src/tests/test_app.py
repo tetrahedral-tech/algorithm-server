@@ -3,6 +3,7 @@ import unittest
 import price, utils, backtest_module, app, time
 
 class TestApp(unittest.TestCase):
+
 	def test_app(self):
 		application = app.get_app()
 		app_client = application.test_client()
