@@ -32,14 +32,12 @@ The trading logic is implemented in a Flask web application that serves as an AP
 ## Getting Started
 
 ### Prerequisites
-
-- Python 3.10 and higher
 - Install required Python packages: `conda activate auto-trading && conda env update -n auto-trading --file environment.yml` on linux/unix
 - Install redis using: `sudo apt-get update && sudo apt-get install redis `
 
 ### Configuration
 
-1. Configure jwt, mongo-db-uri, redis-uri parameters in `.env` you can use `example.env` for help.
+1. Configure jwt, mongo-db-uri, redis-uri parameters in `.env` you can use `.example.env` for help.
 
 ### Usage
 
@@ -48,18 +46,3 @@ The trading logic is implemented in a Flask web application that serves as an AP
    - Backtest: `http://localhost:5000/backtest/{algorithm_name}?interval=integer&plot=boolean`
    - Plot: `http://localhost:5000/plot/{algorithm_name}?interval=integer`
    - Internal Checker: `http://localhost:5000/internal-checker?interval=integer`
-
-## Screenshots
-
-screenshot*
-
-## Contributing
-
-This is a closed source application only members of organization can contribute.
-
-## License
-
-All rights reserved. This project is closed source and proprietary. No part of this project may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of the project owner.
-
-For licensing inquiries, please contact us.
-
