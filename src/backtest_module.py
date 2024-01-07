@@ -64,10 +64,10 @@ def plot(back_test_data):
 	plt.plot(timestamps, balances, color=colors.primary())
 
 	buy_signals = np.where(np.array(signals) == 'buy')[0]
-	plt.scatter(buy_signals, [balances[i] for i in buy_signals], color=colors.lower())
+	plt.scatter(buy_signals, [balances[i] for i in buy_signals], color=colors.buy())
 
 	sell_signals = np.where(np.array(signals) == 'sell')[0]
-	plt.scatter(sell_signals, [balances[i] for i in sell_signals], color=colors.upper())
+	plt.scatter(sell_signals, [balances[i] for i in sell_signals], color=colors.sell())
 
 	plt.text(timestamps[-1], balances[-1] - 2, str(back_test_data['final_total']))
 

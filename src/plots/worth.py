@@ -6,6 +6,6 @@ from datetime import datetime as dt
 def plot(values, timestamps):
 	values = np.array(values)
 	timestamps = [dt.fromtimestamp(timestamp) for timestamp in timestamps]
-	plt.plot(timestamps, values, color=colors.upper())
+	plt.plot(timestamps, values, color=colors.sell())
 
 	return plt
