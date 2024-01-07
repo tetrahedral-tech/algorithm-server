@@ -5,5 +5,5 @@ RUN conda env create -f environment.yml
 
 COPY . .
 EXPOSE 80
-RUN cd src/
+WORKDIR /app/src
 CMD ["conda", "run", "--no-capture-output", "-n", "auto-trading", "waitress-serve", "--port=80", "--call", "app:get_app"]
