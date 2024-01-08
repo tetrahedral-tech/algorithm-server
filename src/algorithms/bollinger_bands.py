@@ -41,5 +41,5 @@ class Algorithm:
 		plt.title("Bollinger Bands plots")
 		plt.xlabel("Time")
 		plt.ylabel("Price")
-  
+
 		plt.legend()

@@ -38,9 +38,9 @@ class Algorithm:
 		plt.title("MACD-Price plots")
 		plt.xlabel("Time")
 		plt.ylabel("Price")
-		
+
 		plt.legend()
-  
+
 		plt.subplot(212)
 		plt.plot(timestamps, macd, color=colors.primary(), label='Macd line')
 		plt.plot(timestamps, signal, color=colors.secondary(), label='Signal line')
@@ -54,5 +54,5 @@ class Algorithm:
 		plt.title("MACD plots")
 		plt.xlabel("Time")
 		plt.ylabel("Price")
-		
+
 		plt.legend()
