@@ -32,7 +32,7 @@ class Algorithm:
 		plt.subplot(gs[0, :])
 		rsi_line = self.algorithm(prices, **kwargs)
 
-		plt.plot(timestamps, rsi_line, color=colors.primary())
+		plt.plot(timestamps, rsi_line, color=colors.primary(), label='RSI')
 
 		# Thresholds
 		upper = np.full(rsi_line.shape, self.high)
@@ -41,10 +41,18 @@ class Algorithm:
 		buy_condition = rsi_line <= self.low
 
 		plt.fill_between(timestamps, upper, lower, color='grey', alpha=0.3)
-		plt.plot(timestamps, upper, linestyle='dashed', color=colors.sell())
-		plt.plot(timestamps, lower, linestyle='dashed', color=colors.buy())
+		plt.plot(timestamps, upper, linestyle='dashed', color=colors.sell(), label='RSI high band')
+		plt.plot(timestamps, lower, linestyle='dashed', color=colors.buy(), label='RSI low band')
+		plt.title("RSI Plots")
+		plt.xlabel("Time")
+		plt.ylabel("RSI LINE")
+		plt.legend()
 
 		plt.subplot(gs[1, :])
-		plt.plot(timestamps, prices, color=colors.primary())
-		plt.scatter(timestamps[sell_condition], prices[sell_condition], color=colors.sell())
-		plt.scatter(timestamps[buy_condition], prices[buy_condition], color=colors.buy())
+		plt.plot(timestamps, prices, color=colors.primary(), label='price')
+		plt.scatter(timestamps[sell_condition], prices[sell_condition], color=colors.sell(), label='Sell conditions')
+		plt.scatter(timestamps[buy_condition], prices[buy_condition], color=colors.buy(), label='Buy conditions')
+		plt.title("Time-signals")
+		plt.xlabel("Time")
+		plt.ylabel("Price")
+		plt.legend()

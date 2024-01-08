@@ -28,12 +28,18 @@ class Algorithm:
 		plt.fill_between(timestamps, upper_bands, lower_bands, color='grey', alpha=0.3)
 
 		# Price/SMA
-		plt.plot(timestamps, prices, color=colors.primary())
-		plt.plot(timestamps, middle_bands, color=colors.secondary())
+		plt.plot(timestamps, prices, color=colors.primary(), label='price')
+		plt.plot(timestamps, middle_bands, color=colors.secondary(), label='Bollinger Middle Bands (SMA)')
 
 		# Buy/Sell Signals
 		sell_condition = prices >= upper_bands
 		buy_condition = prices <= lower_bands
 
-		plt.scatter(timestamps[sell_condition], prices[sell_condition], color=colors.sell())
-		plt.scatter(timestamps[buy_condition], prices[buy_condition], color=colors.buy())
+		plt.scatter(timestamps[sell_condition], prices[sell_condition], color=colors.sell(), label='Sell conditions')
+		plt.scatter(timestamps[buy_condition], prices[buy_condition], color=colors.buy(), label='Buy conditions')
+
+		plt.title("Bollinger Bands plots")
+		plt.xlabel("Time")
+		plt.ylabel("Price")
+  
+		plt.legend()
