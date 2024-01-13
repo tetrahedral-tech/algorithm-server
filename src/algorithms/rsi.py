@@ -26,9 +26,9 @@ class Algorithm:
 
 		return 'no_action', 0
 
-	def plot(self, prices, timestamps, custom_algorithm_plot=False,**kwargs):
+	def plot(self, prices, timestamps, custom_algorithm_plot=False, **kwargs):
 		rsi_line = self.algorithm(prices, **kwargs)
-  	# Thresholds
+		# Thresholds
 		upper = np.full(rsi_line.shape, self.high)
 		lower = np.full(rsi_line.shape, self.low)
 		sell_condition = rsi_line >= self.high
@@ -40,14 +40,13 @@ class Algorithm:
 			plt.plot(timestamps, prices, color=colors.primary(), label='price')
 			plt.scatter(timestamps[sell_condition], prices[sell_condition], color=colors.sell(), label='Sell conditions')
 			plt.scatter(timestamps[buy_condition], prices[buy_condition], color=colors.buy(), label='Buy conditions')
-   
+
 			plt.title("Time-signals")
 			plt.xlabel("Time")
 			plt.ylabel("Price")
 			plt.legend()
-   
-			plt.subplot(gs[1, :])
 
+			plt.subplot(gs[1, :])
 
 		plt.plot(timestamps, rsi_line, color=colors.primary(), label='RSI')
 
