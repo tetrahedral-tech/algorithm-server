@@ -26,19 +26,30 @@ class Algorithm:
 
 		return 'no_action', 0
 
-	def plot(self, prices, timestamps, **kwargs):
-		gs = GridSpec(3, 1, figure=plt.gcf())
-
-		plt.subplot(gs[0, :])
+	def plot(self, prices, timestamps, custom_algorithm_plot=False,**kwargs):
 		rsi_line = self.algorithm(prices, **kwargs)
-
-		plt.plot(timestamps, rsi_line, color=colors.primary(), label='RSI')
-
-		# Thresholds
+  	# Thresholds
 		upper = np.full(rsi_line.shape, self.high)
 		lower = np.full(rsi_line.shape, self.low)
 		sell_condition = rsi_line >= self.high
 		buy_condition = rsi_line <= self.low
+
+		if not custom_algorithm_plot:
+			gs = GridSpec(3, 1, figure=plt.gcf())
+			plt.subplot(gs[0, :])
+			plt.plot(timestamps, prices, color=colors.primary(), label='price')
+			plt.scatter(timestamps[sell_condition], prices[sell_condition], color=colors.sell(), label='Sell conditions')
+			plt.scatter(timestamps[buy_condition], prices[buy_condition], color=colors.buy(), label='Buy conditions')
+   
+			plt.title("Time-signals")
+			plt.xlabel("Time")
+			plt.ylabel("Price")
+			plt.legend()
+   
+			plt.subplot(gs[1, :])
+
+
+		plt.plot(timestamps, rsi_line, color=colors.primary(), label='RSI')
 
 		plt.fill_between(timestamps, upper, lower, color='grey', alpha=0.3)
 		plt.plot(timestamps, upper, linestyle='dashed', color=colors.sell(), label='RSI high band')
@@ -46,13 +57,4 @@ class Algorithm:
 		plt.title("RSI Plots")
 		plt.xlabel("Time")
 		plt.ylabel("RSI LINE")
-		plt.legend()
-
-		plt.subplot(gs[1, :])
-		plt.plot(timestamps, prices, color=colors.primary(), label='price')
-		plt.scatter(timestamps[sell_condition], prices[sell_condition], color=colors.sell(), label='Sell conditions')
-		plt.scatter(timestamps[buy_condition], prices[buy_condition], color=colors.buy(), label='Buy conditions')
-		plt.title("Time-signals")
-		plt.xlabel("Time")
-		plt.ylabel("Price")
 		plt.legend()

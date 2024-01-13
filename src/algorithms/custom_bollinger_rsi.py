@@ -49,7 +49,7 @@ class Algorithm:
 
 		plt.subplot(gs[-1, :])
 		rsi = RSI(window_size=self.rsi_window_size)
-		rsi.plot(prices, timestamps)
+		rsi.plot(prices, timestamps, custom_algorithm_plot=True)
 		plt.subplot(gs[-2, :])
 		Bollinger_Bands = BollingerBands(window_size=self.bollinger_bands_window_size)
 		Bollinger_Bands.plot(prices, timestamps)
