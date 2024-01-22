@@ -1,3 +1,5 @@
+import waitress
+import os
 import schedule, time
 from threading import Thread
 from dotenv import load_dotenv
@@ -34,8 +36,11 @@ def start_price_cache():
 
 if __name__ == '__main__':
 	start_price_cache()
-	app.run()
 
-def get_app():
-	start_price_cache()
-	return app
+	if os.environ.get('WSGI') == '1':
+		listen_url = '0.0.0.0:80'
+		print('starting waitress...')
+		waitress.serve(app, listen=listen_url)
+		print(f'listening on {listen_url}')
+	else:
+		app.run()
