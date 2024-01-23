@@ -7,4 +7,4 @@ COPY . .
 EXPOSE 80
 WORKDIR /app/src
 ENV WSGI 1
-CMD ["conda", "run", "--no-capture-output", "-n", "auto-trading", "gunicorn", "app:get_app", "--config", "config.py"]
+CMD ["conda", "run", "--no-capture-output", "-n", "auto-trading", "gunicorn", "app:app", "--config", "config.py"]
