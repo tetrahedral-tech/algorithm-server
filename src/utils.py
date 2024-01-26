@@ -44,15 +44,3 @@ def svg_plot():
 	svg_buffer.close()
 
 	return plot_data
-
-def interpolate_timestamps(timestamps, interval):
-	timestamps = np.array(timestamps, dtype='float64')  # Convert to float
-	interval_seconds = interval * 60  # Convert minutes to seconds
-
-	# Calculate the number of intervals needed
-	num_intervals = int((timestamps[-1] - timestamps[0]) / interval_seconds) + 1
-
-	# Generate new timestamps using np.arange
-	new_timestamps = np.arange(timestamps[0], timestamps[0] + num_intervals * interval_seconds, interval_seconds)
-
-	return new_timestamps
