@@ -40,9 +40,9 @@ def get_prices(interval='default', pair='WETH'):
 	if interval == 'default':
 		interval = get_default_interval()
 
-	slicing_ration = int(interval/price_api_interval)
+	slicing_ratio = int(interval/price_api_interval)
  
-	prices = redis.lrange(f'{pair}:prices', 0, -1)[::slicing_ration]
-	timestamps = redis.lrange(f'{pair}:timestamps', 0, -1)[::slicing_ration]
+	prices = redis.lrange(f'{pair}:prices', 0, -1)[::slicing_ratio]
+	timestamps = redis.lrange(f'{pair}:timestamps', 0, -1)[::slicing_ratio]
 	last_complete_point = prices[-1]
 	return np.array(prices).astype(float), np.array(timestamps).astype(int), float(last_complete_point)
