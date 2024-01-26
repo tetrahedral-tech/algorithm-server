@@ -1,4 +1,4 @@
-from price import get_prices, get_default_interval, get_cached_prices, is_cached_interval, is_supported_interval
+from price import get_prices, get_default_interval, is_supported_interval
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
@@ -20,12 +20,10 @@ def plot(algorithm_name):
 	if algorithm_name not in ['price', *get_algorithms()]:
 		return 'Unsupported Algorithm', 404
 
-	if interval and is_cached_interval(interval):
-		prices, timestamps, _ = get_cached_prices(interval=interval)
-	elif interval and is_supported_interval(interval):
+	if interval and is_supported_interval(interval):
 		prices, timestamps, _ = get_prices(interval=interval)
 	elif not interval:
-		prices, timestamps, _ = get_cached_prices()
+		prices, timestamps, _ = get_prices()
 	else:
 		return 'Unsupported Interval', 400
 
