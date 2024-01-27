@@ -1,6 +1,6 @@
 #Run using python unisttest tests.test_app.py
 import unittest
-import price, utils, backtest_module, app, time
+import price, utils, app, time
 
 class TestApp(unittest.TestCase):
 
