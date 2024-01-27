@@ -6,7 +6,7 @@ from price import get_prices, get_default_interval, is_supported_interval
 
 mpl.use('Agg')
 
-def backtest_view(algorithm_name):
+def backtest_view(algorithm_name: str):
 	interval = int(request.args.get('interval') or get_default_interval())
 	plot_bool = bool(request.args.get('plot') or False)
 

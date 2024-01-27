@@ -9,7 +9,7 @@ from plots.worth import plot
 mpl.use('Agg')
 bots = utils.client['database']['bots']
 
-def worth(bot_id):
+def worth(bot_id:str):
 	try:
 		bot = bots.find_one({'_id': ObjectId(bot_id)})
 		decoded = utils.authorize(request.headers.get('Authorization'))

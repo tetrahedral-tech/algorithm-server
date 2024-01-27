@@ -8,10 +8,10 @@ class Algorithm:
 	def __init__(self, fastperiod=12, slowperiod=26, signalperiod=9):
 		self.fastperiod, self.slowperiod, self.signalperiod = fastperiod, slowperiod, signalperiod
 
-	def algorithm(self, prices):
+	def algorithm(self, prices: list[float]) -> tuple[float]:
 		return MACD(prices, fastperiod=self.fastperiod, slowperiod=self.slowperiod, signalperiod=self.signalperiod)
 
-	def signal(self, _, data):
+	def signal(self, _, data: tuple[float]):
 		macds, signals, histogram = data
 		positive_histogram = np.abs(histogram)
 		histogram_max = np.max(np.nan_to_num(positive_histogram))
@@ -22,7 +22,7 @@ class Algorithm:
 			return 'sell', 1
 		return 'no_action', 0
 
-	def plot(self, prices, timestamps, **kwargs):
+	def plot(self, prices: list[float], timestamps: list[float], **kwargs):
 		macd, signal, histogram = self.algorithm(prices, **kwargs)
 
 		buy_condition = np.insert((macd[1:] > signal[1:]) & (macd[:-1] < signal[:-1]), 0, False)

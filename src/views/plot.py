@@ -13,7 +13,7 @@ mpl.use('Agg')
 figure_size = mpl.rcParams['figure.figsize']
 figure_size[0] = figure_size[0] * 1.5
 
-def plot(algorithm_name):
+def plot(algorithm_name: str):
 	interval = int(request.args.get('interval') or get_default_interval())
 	interactive = bool(request.args.get('interactive') or False)
 

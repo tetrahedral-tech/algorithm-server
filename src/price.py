@@ -1,6 +1,5 @@
 import os
 import numpy as np
-from requests import get
 from redis import from_url
 from dotenv import load_dotenv
 from flask import has_request_context, request
@@ -8,19 +7,16 @@ from flask import has_request_context, request
 load_dotenv()
 redis = from_url(os.environ['REDIS_URI'])
 
-#  1   5     15    30   60  240  1440 10080 21600
-#  12h 2d12h 1w12h 2w1d 1mo 4mo  2y   14y   30y
-
 point_count = 720
 default_interval = 240
 price_api_interval = 5
 supported_intervals = [5, 15, 30, 60, 240, 1440, 10080]
 
-def is_supported_interval(interval):
+def is_supported_interval(interval: int) -> bool:
 	global supported_intervals
 	return interval in supported_intervals
 
-def set_default_interval(interval):
+def set_default_interval(interval: int) -> int:
 	global default_interval
 	if not is_supported_interval(interval):
 		raise Exception('Unsupported Interval')
@@ -29,7 +25,7 @@ def set_default_interval(interval):
 	return default_interval
 
 # Get the default interval
-def get_default_interval():
+def get_default_interval() -> int:
 	if has_request_context():
 		interval = request.args.get('interval')
 		if interval and is_supported_interval(int(interval)):
