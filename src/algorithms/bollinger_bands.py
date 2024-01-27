@@ -7,13 +7,13 @@ class Algorithm:
 	def __init__(self, window_size=20, standard_deviations=2):
 		self.window_size, self.standard_deviations = window_size, standard_deviations
 
-	def algorithm(self, prices):
+	def algorithm(self, prices: list[float]) -> tuple[float]:
 		return BBANDS(prices,
 		              timeperiod=self.window_size,
 		              nbdevup=self.standard_deviations,
 		              nbdevdn=self.standard_deviations)
 
-	def signal(self, prices, data):
+	def signal(self, prices: list[float], data: tuple[float]):
 		upper_bands, _, lower_bands = data
 		if prices[-1] > upper_bands[-1]:
 			return 'sell', 1
@@ -22,7 +22,7 @@ class Algorithm:
 
 		return 'no_action', 0
 
-	def plot(self, prices, timestamps, **kwargs):
+	def plot(self, prices: list[float], timestamps: list[float], **kwargs):
 		upper_bands, middle_bands, lower_bands = self.algorithm(prices, **kwargs)
 
 		plt.fill_between(timestamps, upper_bands, lower_bands, color='grey', alpha=0.3)

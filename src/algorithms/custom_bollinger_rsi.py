@@ -13,7 +13,7 @@ class Algorithm:
 		self.bollinger_bands_window_size = bollinger_bands_window_size
 		self.window_size = max(rsi_window_size, bollinger_bands_window_size)
 
-	def algorithm(self, prices):
+	def algorithm(self, prices: list[float]):
 		Bollinger_Bands = BollingerBands(window_size=self.bollinger_bands_window_size)
 		bb_data = Bollinger_Bands.algorithm(prices)
 		rsi = RSI(window_size=self.rsi_window_size, high=self.rsi_high, low=self.rsi_low)
@@ -21,7 +21,7 @@ class Algorithm:
 
 		return [*bb_data, rsi_line]
 
-	def signal(self, prices, data):
+	def signal(self, prices: list[float], data: list[list[float]]):
 		price = prices[-1]
 
 		upper_bands, _, lower_bands, rsi_line = data  #middle bands not needed && corrected bollinger bands from upper, lowe, middle to current
@@ -33,7 +33,7 @@ class Algorithm:
 
 		return 'no_action', 0
 
-	def plot(self, prices, timestamps, **kwargs):
+	def plot(self, prices: list[float], timestamps: list[float], **kwargs):
 		gs = GridSpec(3, 1, figure=plt.gcf())
 
 		plt.subplot(gs[0, :])

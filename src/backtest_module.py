@@ -5,7 +5,7 @@ from matplotlib.gridspec import GridSpec
 from plots import colors
 import io
 
-def backtest(algorithm, prices, timestamps, balance=200, strength_to_usd=200, plot=False):
+def backtest(algorithm:str, prices:list[float], timestamps:list[float], balance=200, strength_to_usd=200, plot=False) -> dict:
 	transactions = []
 	start_balance = balance
 	shares = 0
@@ -52,7 +52,7 @@ def backtest(algorithm, prices, timestamps, balance=200, strength_to_usd=200, pl
 	  'profit_percentage %': ((balance + shares * price) - start_balance) / start_balance
 	}
 
-def plot(back_test_data):
+def plot(back_test_data:dict):
 	gs = GridSpec(3, 1, figure=plt.gcf())
 
 	timestamps = [transaction['timestamp'] for transaction in back_test_data['transactions']]

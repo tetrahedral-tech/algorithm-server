@@ -11,10 +11,10 @@ class Algorithm:
 		self.high = high
 		self.low = low
 
-	def algorithm(self, prices):
+	def algorithm(self, prices: list[float]) -> list[float]:
 		return RSI(prices, timeperiod=self.window_size)
 
-	def signal(self, _, data):
+	def signal(self, _, data: list[float]):
 		rsi = data
 
 		if rsi[-1] > self.high:
@@ -26,7 +26,7 @@ class Algorithm:
 
 		return 'no_action', 0
 
-	def plot(self, prices, timestamps, custom_algorithm_plot=False, **kwargs):
+	def plot(self, prices: list[float], timestamps: list[float], custom_algorithm_plot=False, **kwargs):
 		rsi_line = self.algorithm(prices, **kwargs)
 		# Thresholds
 		upper = np.full(rsi_line.shape, self.high)
