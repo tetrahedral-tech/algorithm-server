@@ -14,11 +14,12 @@ def signals():
 		return 'Forbidden', 403
 
 	interval = int(request.args.get('interval') or get_default_interval())
-
+	coin = str(request.args.get('coin') or 'WETH')
+ 
 	if interval and is_supported_interval(interval):
-		prices, _, _ = get_prices(interval=interval)
+		prices, _, _ = get_prices(interval=interval, pair=coin)
 	elif not interval:
-		prices, _, _ = get_prices()
+		prices, _, _ = get_prices(pair=coin)
 	else:
 		return 'Unsupported Interval', 400
 
