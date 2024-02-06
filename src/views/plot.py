@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 from importlib import import_module
-from utils import get_algorithms, svg_plot
+from utils import get_algorithms, svg_plot, timestamps_range
 from plots.styling import style_plots
 from mpld3 import fig_to_html
 from flask import request
@@ -16,14 +16,25 @@ figure_size[0] = figure_size[0] * 1.5
 def plot(algorithm_name: str):
 	interval = int(request.args.get('interval') or get_default_interval())
 	interactive = bool(request.args.get('interactive') or False)
-
+	from_time = int(request.args.get('from') or False)
+	to_time = int(request.args.get('to') or -1)
 	if algorithm_name not in ['price', *get_algorithms()]:
 		return 'Unsupported Algorithm', 404
-
+	
 	if interval and is_supported_interval(interval):
 		prices, timestamps, _ = get_prices(interval=interval)
+		if from_time:
+			try:
+				prices, timestamps = timestamps_range(from_time, to_time, prices, timestamps)
+			except Exception as e:
+				return str(e)
 	elif not interval:
 		prices, timestamps, _ = get_prices()
+		if from_time:
+			try:
+				prices, timestamps = timestamps_range(from_time, to_time, prices, timestamps)
+			except Exception as e:
+				return str(e)
 	else:
 		return 'Unsupported Interval', 400
 
