@@ -20,7 +20,7 @@ def plot(algorithm_name: str):
 	to_time = int(request.args.get('to') or -1)
 	if algorithm_name not in ['price', *get_algorithms()]:
 		return 'Unsupported Algorithm', 404
-	
+
 	if interval and is_supported_interval(interval):
 		prices, timestamps, _ = get_prices(interval=interval)
 		if from_time:

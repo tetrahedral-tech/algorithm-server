@@ -44,7 +44,7 @@ def svg_plot() -> str:
 
 	return plot_data
 
-def timestamps_range(from_time:int, to_time:int, prices:list, timestamps:list) -> tuple[list, list]:
+def timestamps_range(from_time: int, to_time: int, prices: list, timestamps: list) -> tuple[list, list]:
 	if from_time not in list(timestamps):
 		raise Exception('INCORRECT TIMESTAMPS.')
 
@@ -57,6 +57,6 @@ def timestamps_range(from_time:int, to_time:int, prices:list, timestamps:list) -
 			raise Exception('INCORRECT INPUT.')
 
 		to_index = int(np.where(timestamps == to_time)[0][0])
-		return prices[from_index: to_index], timestamps[from_index: to_index]
-	
-	return prices[from_index: to_time], timestamps[from_index: to_time]
+		return prices[from_index:to_index], timestamps[from_index:to_index]
+
+	return prices[from_index:to_time], timestamps[from_index:to_time]
