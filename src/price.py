@@ -51,5 +51,5 @@ def get_prices(interval, pair):
 
 	prices = redis.lrange(f'{pair}:prices', 0, -1)[::slicing_ratio]
 	timestamps = redis.lrange(f'{pair}:timestamps', 0, -1)[::slicing_ratio]
-	last_complete_point = prices[-1]
-	return np.array(prices).astype(float), np.array(timestamps).astype(int), float(last_complete_point)
+
+	return np.array(prices).astype(float), np.array(timestamps).astype(int)

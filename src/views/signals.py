@@ -18,7 +18,7 @@ def signals():
 	coin = request.args.get('coin', type=str)
 
 	try:
-		prices, _, _ = get_prices(interval=interval, pair=coin)
+		prices, _ = get_prices(interval=interval, pair=coin)
 	except Exception as error:
 		return str(error), 400
 
