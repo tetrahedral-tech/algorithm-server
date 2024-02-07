@@ -23,15 +23,13 @@ def plot(algorithm_name: str):
 
 	from_time = int(request.args.get('from') or False)
 	to_time = int(request.args.get('to') or -1)
-	if algorithm_name not in ['price', *get_algorithms()]:
-		return 'Unsupported Algorithm', 404
 
-	prices, timestamps, _ = get_prices(interval, pair)
-	if from_time:
-		try:
+	try:
+		prices, timestamps, _ = get_prices(interval, pair)
+		if from_time:
 			prices, timestamps = timestamps_range(from_time, to_time, prices, timestamps)
-		except Exception as error:
-			return str(error)
+	except Exception as error:
+		return str(error)
 
 	# Even out timestamps so plotting algos works
 	timestamps = timestamps.astype('datetime64[s]')
