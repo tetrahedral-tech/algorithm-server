@@ -13,7 +13,6 @@ CORS(app)
 app.add_url_rule('/plot/<algorithm_name>', view_func=plot.plot)
 app.add_url_rule('/backtest/<algorithm_name>', view_func=backtest.backtest_view)
 app.add_url_rule('/worth/<bot_id>', view_func=worth.worth)
-app.add_url_rule('/interval', view_func=interval.interval)
 app.add_url_rule('/signals', view_func=signals.signals)
 
 if __name__ == '__main__':
