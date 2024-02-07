@@ -15,7 +15,7 @@ def backtest_view(algorithm_name: str):
 	visualize = request.args.get('plot', type=bool, default=False)
 
 	try:
-		prices, timestamps, _ = get_prices(interval, get_using_coin())
+		prices, timestamps = get_prices(interval, get_using_coin())
 	except Exception as error:
 		return str(error), 400
 

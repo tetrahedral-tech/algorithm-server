@@ -5,7 +5,7 @@ import price, backtest_module
 class TestApp(unittest.TestCase):
 	#Test backtest_module.py, using backtest plot data is because theres no much diffirence (optomization)
 	def test_backtest(self):
-		prices, timestamps, _ = price.get_prices()
+		prices, timestamps = price.get_prices()
 		backtest_plot_data = backtest_module.backtest('bollinger_bands', prices, timestamps, plot=True)
 		#Test back test data keys are correct and backtest data exsits
 		backtest_dict = {

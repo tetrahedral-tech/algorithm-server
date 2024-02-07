@@ -25,7 +25,7 @@ def plot(algorithm_name: str):
 	to_time = int(request.args.get('to') or -1)
 
 	try:
-		prices, timestamps, _ = get_prices(interval, pair)
+		prices, timestamps = get_prices(interval, pair)
 		if from_time:
 			prices, timestamps = timestamps_range(from_time, to_time, prices, timestamps)
 	except Exception as error:
