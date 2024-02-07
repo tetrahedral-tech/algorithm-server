@@ -1,7 +1,7 @@
 import os
 from flask import request
 from redis import from_url
-from price import get_prices, is_supported_interval
+from price import get_prices
 from ipaddress import ip_address
 from utils import get_algorithms, algorithm_output
 
@@ -13,16 +13,14 @@ def signals():
 	if not ip_address(request.remote_addr).is_private:
 		return 'Forbidden', 403
 
+	# require explicit interval and coin instead of using get_using_x()
 	interval = request.args.get('interval', type=int)
 	coin = request.args.get('coin', type=str)
 
-	if 'interval' not in request.json or 'coin' not in request.json:
-		return 'Bad Request', 400
-
 	try:
 		prices, _, _ = get_prices(interval=interval, pair=coin)
-	except:
-		return 'Unsupported Interval', 400
+	except Exception as error:
+		return str(error), 400
 
 	# Convert list of algorithms into {name: signal}
 	algorithms = get_algorithms()

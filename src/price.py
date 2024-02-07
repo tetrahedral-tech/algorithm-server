@@ -38,8 +38,14 @@ def get_using_coin() -> str:
 	return default_coin
 
 def get_prices(interval, pair):
+	if not interval or not pair:
+		raise Exception('No Interval/Pair')
+
 	if not is_supported_interval(interval):
 		raise Exception(f'Unsupported Interval: {interval}')
+
+	if not is_supported_coin(pair):
+		raise Exception(f'Unsupported Pair: {pair}')
 
 	slicing_ratio = int(interval / price_collector_interval)
 
