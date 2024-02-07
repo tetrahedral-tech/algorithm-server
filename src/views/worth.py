@@ -14,7 +14,7 @@ def worth(bot_id: str):
 		bot = bots.find_one({'_id': ObjectId(bot_id)})
 		decoded = utils.authorize(request.headers.get('Authorization'))
 		if decoded['_id'] != str(bot['owner']):
-			raise 'Token Mismatch'
+			raise Exception('Token Mismatch')
 	except Exception:
 		return 'Unauthorized', 401
 
