@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
-from views import plot, signals, worth, interval, update_interval, backtest
+from views import plot, signals, worth, backtest
 
 load_dotenv()
 
