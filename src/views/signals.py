@@ -15,7 +15,7 @@ def signals():
 
 	interval = int(request.args.get('interval') or get_default_interval())
 	coin = str(request.args.get('coin') or 'WETH')
- 
+
 	if interval and is_supported_interval(interval):
 		prices, _, _ = get_prices(interval=interval, pair=coin)
 	elif not interval:
@@ -23,14 +23,12 @@ def signals():
 	else:
 		return 'Unsupported Interval', 400
 
-
 	# Convert list of algorithms into {name: signal}
 	algorithms = get_algorithms()
-
 
 	base = dict(map(lambda x: algorithm_output(*x), zip(algorithms, [prices] * len(algorithms))))
 
 	signals = {k: v[0] for (k, v) in base.items()}
-	_ = {k: v[1] for (k, v) in base.items()} # Strengths (not used)
+	# strengths = {k: v[1] for (k, v) in base.items()}
 
 	return signals
