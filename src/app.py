@@ -15,7 +15,6 @@ app.add_url_rule('/backtest/<algorithm_name>', view_func=backtest.backtest_view)
 app.add_url_rule('/worth/<bot_id>', view_func=worth.worth)
 app.add_url_rule('/interval', view_func=interval.interval)
 app.add_url_rule('/signals', view_func=signals.signals)
-app.add_url_rule('/update_interval', view_func=update_interval.update_interval, methods=['POST'])
 
 if __name__ == '__main__':
 	app.run()

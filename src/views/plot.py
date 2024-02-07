@@ -1,4 +1,4 @@
-from price import get_prices, get_default_interval, is_supported_interval
+from price import get_prices, get_using_coin, get_using_interval, is_supported_interval
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
@@ -14,29 +14,24 @@ figure_size = mpl.rcParams['figure.figsize']
 figure_size[0] = figure_size[0] * 1.5
 
 def plot(algorithm_name: str):
-	interval = int(request.args.get('interval') or get_default_interval())
-	interactive = bool(request.args.get('interactive') or False)
+	interval = get_using_interval()
+	pair = get_using_coin()
+	interactive = request.args.get('interactive', type=bool, default=False)
+
+	if algorithm_name not in ['price', *get_algorithms()]:
+		return 'Unsupported Algorithm', 404
+
 	from_time = int(request.args.get('from') or False)
 	to_time = int(request.args.get('to') or -1)
 	if algorithm_name not in ['price', *get_algorithms()]:
 		return 'Unsupported Algorithm', 404
 
-	if interval and is_supported_interval(interval):
-		prices, timestamps, _ = get_prices(interval=interval)
-		if from_time:
-			try:
-				prices, timestamps = timestamps_range(from_time, to_time, prices, timestamps)
-			except Exception as e:
-				return str(e)
-	elif not interval:
-		prices, timestamps, _ = get_prices()
-		if from_time:
-			try:
-				prices, timestamps = timestamps_range(from_time, to_time, prices, timestamps)
-			except Exception as e:
-				return str(e)
-	else:
-		return 'Unsupported Interval', 400
+	prices, timestamps, _ = get_prices(interval, pair)
+	if from_time:
+		try:
+			prices, timestamps = timestamps_range(from_time, to_time, prices, timestamps)
+		except Exception as error:
+			return str(error)
 
 	# Even out timestamps so plotting algos works
 	timestamps = timestamps.astype('datetime64[s]')
