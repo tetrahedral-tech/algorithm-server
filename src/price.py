@@ -9,34 +9,39 @@ redis = from_url(os.environ['REDIS_URI'])
 
 point_count = 720
 default_interval = 240
-price_api_interval = 5
+price_collector_interval = 5
 supported_intervals = [5, 15, 30, 60, 240, 1440, 10080]
+
+default_coin = 'WETH'
+supported_coins = ['WETH']
 
 def is_supported_interval(interval: int) -> bool:
 	global supported_intervals
 	return interval in supported_intervals
 
-def set_default_interval(interval: int) -> int:
-	global default_interval
-	if not is_supported_interval(interval):
-		raise Exception('Unsupported Interval')
+def is_supported_coin(coin: str) -> bool:
+	global supported_coins
+	return coin in supported_coins
 
-	default_interval = interval
-	return default_interval
-
-# Get the default interval
-def get_default_interval() -> int:
+def get_using_interval() -> int:
 	if has_request_context():
-		interval = request.args.get('interval')
-		if interval and is_supported_interval(int(interval)):
-			return int(interval)
+		interval = request.args.get('interval', type=int)
+		if is_supported_interval(interval):
+			return interval
 	return default_interval
 
-def get_prices(interval='default', pair='WETH'):
-	if interval == 'default':
-		interval = get_default_interval()
+def get_using_coin() -> str:
+	if has_request_context():
+		coin = request.args.get('coin')
+		if is_supported_coin(coin):
+			return coin
+	return default_coin
 
-	slicing_ratio = int(interval / price_api_interval)
+def get_prices(interval, pair):
+	if not is_supported_interval(interval):
+		raise Exception(f'Unsupported Interval: {interval}')
+
+	slicing_ratio = int(interval / price_collector_interval)
 
 	prices = redis.lrange(f'{pair}:prices', 0, -1)[::slicing_ratio]
 	timestamps = redis.lrange(f'{pair}:timestamps', 0, -1)[::slicing_ratio]

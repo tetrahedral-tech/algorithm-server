@@ -19,14 +19,6 @@ def authorize(encoded: str) -> str:
 
 	return jwt.decode(encoded, os.environ['JWT_SECRET'], algorithms=['HS256'])
 
-def authorize_server(encoded: str) -> str:
-	decoded = authorize(encoded)
-
-	if not decoded['server']:
-		raise Exception('Client Token')
-
-	return decoded
-
 def algorithm_output(algorithm_name: str, prices: list[float], backtest=False) -> tuple[str, tuple[str, float]]:
 	module = import_module(f'algorithms.{algorithm_name}').Algorithm()
 	signal, strength = module.signal(prices, module.algorithm(prices))
