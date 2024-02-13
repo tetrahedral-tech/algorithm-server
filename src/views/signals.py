@@ -27,7 +27,6 @@ def signals():
 
 	base = dict(map(lambda x: algorithm_output(*x), zip(algorithms, [prices] * len(algorithms))))
 
-	signals = {k: v[0] for (k, v) in base.items()}
-	# strengths = {k: v[1] for (k, v) in base.items()}
+	signals = [{'algorithm': k, 'signal': v[0], 'strength': v[1]} for (k, v) in base.items()]
 
 	return signals
