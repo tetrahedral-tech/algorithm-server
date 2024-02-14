@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'master'
-      - 'transaction-service'
 
 jobs:
   docker:
