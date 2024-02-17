@@ -22,9 +22,7 @@ def signals():
 	except Exception as error:
 		return str(error), 400
 
-	# Convert list of algorithms into {name: signal}
 	algorithms = get_algorithms()
-
 	base = dict(map(lambda x: algorithm_output(*x), zip(algorithms, [prices] * len(algorithms))))
 
 	# @TODO replace amount with user specified max instead of 10
