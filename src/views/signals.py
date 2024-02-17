@@ -27,6 +27,7 @@ def signals():
 
 	base = dict(map(lambda x: algorithm_output(*x), zip(algorithms, [prices] * len(algorithms))))
 
-	signals = [{'algorithm': k, 'signal': v[0], 'strength': v[1]} for (k, v) in base.items()]
+	# @TODO replace amount with user specified max instead of 10
+	signals = [{'algorithm': k, 'signal': v[0], 'amount': v[1] * 10} for (k, v) in base.items()]
 
 	return signals
