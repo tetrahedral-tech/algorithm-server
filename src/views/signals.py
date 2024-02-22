@@ -15,10 +15,10 @@ def signals():
 
 	# require explicit interval and coin instead of using get_using_x()
 	interval = request.args.get('interval', type=int)
-	coin = request.args.get('coin', type=str)
+	pair = request.args.get('pair', type=str)
 
 	try:
-		prices, _ = get_prices(interval=interval, pair=coin)
+		prices, _ = get_prices(interval=interval, pair=pair)
 	except Exception as error:
 		return str(error), 400
 

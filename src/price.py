@@ -12,8 +12,8 @@ default_interval = 240
 price_collector_interval = 5
 supported_intervals = [5, 15, 30, 60, 240, 1440, 10080]
 
-default_coin = 'WETH'
-supported_coins = ['WETH']
+default_coin = 'USDC-WETH'
+supported_coins = ['USDC-WETH']
 
 def is_supported_interval(interval: int) -> bool:
 	global supported_intervals
