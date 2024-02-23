@@ -12,16 +12,16 @@ default_interval = 240
 price_collector_interval = 5
 supported_intervals = [5, 15, 30, 60, 240, 1440, 10080]
 
-default_coin = 'USDC-WETH'
-supported_coins = ['USDC-WETH']
+default_pair = 'USDC-WETH'
+supported_pairs = ['USDC-WETH']
 
 def is_supported_interval(interval: int) -> bool:
 	global supported_intervals
 	return interval in supported_intervals
 
-def is_supported_coin(coin: str) -> bool:
-	global supported_coins
-	return coin in supported_coins
+def is_supported_pair(pair: str) -> bool:
+	global supported_pairs
+	return pair in supported_pairs
 
 def get_using_interval() -> int:
 	if has_request_context():
@@ -30,12 +30,12 @@ def get_using_interval() -> int:
 			return interval
 	return default_interval
 
-def get_using_coin() -> str:
+def get_using_pair() -> str:
 	if has_request_context():
-		coin = request.args.get('coin')
-		if is_supported_coin(coin):
-			return coin
-	return default_coin
+		pair = request.args.get('pair')
+		if is_supported_pair(pair):
+			return pair
+	return default_pair
 
 def get_prices(interval, pair):
 	if not interval or not pair:
@@ -44,7 +44,7 @@ def get_prices(interval, pair):
 	if not is_supported_interval(interval):
 		raise Exception(f'Unsupported Interval: {interval}')
 
-	if not is_supported_coin(pair):
+	if not is_supported_pair(pair):
 		raise Exception(f'Unsupported Pair: {pair}')
 
 	slicing_ratio = int(interval / price_collector_interval)
