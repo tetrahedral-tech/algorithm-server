@@ -13,7 +13,7 @@ def signals():
 	if not ip_address(request.remote_addr).is_private:
 		return 'Forbidden', 403
 
-	# require explicit interval and coin instead of using get_using_x()
+	# require explicit interval and pair instead of using get_using_x()
 	interval = request.args.get('interval', type=int)
 	pair = request.args.get('pair', type=str)
 
