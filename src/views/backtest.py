@@ -3,7 +3,7 @@ from backtest_module import backtest, plot
 from ipaddress import ip_address
 from utils import get_algorithms
 from flask import request
-from price import get_prices, get_using_coin, get_using_interval
+from price import get_prices, get_using_pair, get_using_interval
 
 mpl.use('Agg')
 
@@ -15,7 +15,7 @@ def backtest_view(algorithm_name: str):
 	visualize = request.args.get('plot', type=bool, default=False)
 
 	try:
-		prices, timestamps = get_prices(interval, get_using_coin())
+		prices, timestamps = get_prices(interval, get_using_pair())
 	except Exception as error:
 		return str(error), 400
 
