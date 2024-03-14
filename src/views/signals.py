@@ -13,21 +13,19 @@ def signals():
 	if not ip_address(request.remote_addr).is_private:
 		return 'Forbidden', 403
 
-	# require explicit interval and coin instead of using get_using_x()
+	# require explicit interval and pair instead of using get_using_x()
 	interval = request.args.get('interval', type=int)
-	coin = request.args.get('coin', type=str)
+	pair = request.args.get('pair', type=str)
 
 	try:
-		prices, _ = get_prices(interval=interval, pair=coin)
+		prices, _ = get_prices(interval=interval, pair=pair)
 	except Exception as error:
 		return str(error), 400
 
-	# Convert list of algorithms into {name: signal}
 	algorithms = get_algorithms()
-
 	base = dict(map(lambda x: algorithm_output(*x), zip(algorithms, [prices] * len(algorithms))))
 
-	signals = {k: v[0] for (k, v) in base.items()}
-	# strengths = {k: v[1] for (k, v) in base.items()}
+	# @TODO replace amount with user specified max instead of 10
+	signals = [{'algorithm': k, 'signal': v[0], 'amount': v[1] * 10} for (k, v) in base.items()]
 
 	return signals

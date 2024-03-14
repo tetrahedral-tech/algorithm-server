@@ -14,6 +14,7 @@ def backtest(algorithm: str,
 	transactions = []
 	start_balance = balance
 	shares = 0
+	price = 0
 
 	for index, price in enumerate(prices, 1):
 		signal, strength = algorithm_output(algorithm, prices[0:index], backtest=True)

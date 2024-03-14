@@ -1,4 +1,4 @@
-from price import get_prices, get_using_coin, get_using_interval, is_supported_interval
+from price import get_prices, get_using_pair, get_using_interval
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
@@ -15,7 +15,7 @@ figure_size[0] = figure_size[0] * 1.5
 
 def plot(algorithm_name: str):
 	interval = get_using_interval()
-	pair = get_using_coin()
+	pair = get_using_pair()
 	interactive = request.args.get('interactive', type=bool, default=False)
 
 	if algorithm_name not in ['price', *get_algorithms()]:
