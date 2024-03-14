@@ -5,9 +5,9 @@ import price, utils, app, time
 class TestApp(unittest.TestCase):
 
 	def test_app(self):
-		application = app.get_app()
+		application = app.app
 		app_client = application.test_client()
-		intervals = price.cached_intervals
+		intervals = price.supported_intervals
 		algorithms = utils.get_algorithms()
 		#Test backtest && backtest plot && plot views
 		for algorithm in algorithms:
@@ -30,7 +30,6 @@ class TestApp(unittest.TestCase):
 				#test plot_response
 				plot_response = app_client.get(f'/backtest/{algorithm}?interval={interval}')
 				self.assertEqual(plot_response.status_code, 200)
-				time.sleep(2)
 
 			#Test internal checker authorization and results
 			authorization_data = {
@@ -43,7 +42,5 @@ class TestApp(unittest.TestCase):
 				self.assertIn(algorithm, internal_checker_response.json['algorithms'])
 
 			#Check internal checker response to false
-			internal_checker_response = app_client.get('/internal_checker', headers={'not_correct': 'not_correct'})
+			internal_checker_response = app_client.get('/signals', headers={'not_correct': 'not_correct'})
 			self.assertEqual(internal_checker_response.status_code, 401)
-
-			time.sleep(2)  #Solved to many requests from kraken

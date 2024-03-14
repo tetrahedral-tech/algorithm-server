@@ -9,4 +9,4 @@ class TestApp(unittest.TestCase):
 		#Test get default interval using 240 (change if the default interval is changed)
 		self.assertEqual(get_using_interval(), 240)
 		#Test get prices using is not none
-		self.assertIsNotNone(get_prices())
+		self.assertIsNotNone(get_prices(240, 'USDC-WETH'))
