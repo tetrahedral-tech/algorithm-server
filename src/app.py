@@ -16,4 +16,4 @@ app.add_url_rule('/worth/<bot_id>', view_func=worth.worth)
 app.add_url_rule('/signals', view_func=signals.signals)
 
 if __name__ == '__main__':
-	app.run()
+	app.run(debug=True)
