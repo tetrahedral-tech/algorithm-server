@@ -7,7 +7,7 @@ from requests import get
 
 load_dotenv()
 redis = from_url(os.environ['REDIS_URI'])
-price_collector = os.environ['PRICE_COLLECTOR_URI']
+price_collector_uri = os.environ['PRICE_COLLECTOR_URI']
 
 point_count = 720
 default_interval = 240
@@ -49,9 +49,8 @@ def get_prices(interval: int, pair: str):
 	if not is_supported_pair(pair):
 		raise Exception(f'Unsupported Pair: {pair}')
 
-	print(f'http://{price_collector}/prices/{pair.lower()}?interval={interval}')
-	price_api = get(f'http://{price_collector}/prices/{pair.lower()}?interval={interval}')
-	data = price_api.json()
+	price_api_response = get(f'{price_collector_uri}/prices/{pair.lower()}?interval={interval}')
+	data = price_api_response.json()
 
 	prices, timestamps = zip(*(item.values() for item in data))
 
