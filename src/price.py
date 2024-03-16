@@ -3,9 +3,11 @@ import numpy as np
 from redis import from_url
 from dotenv import load_dotenv
 from flask import has_request_context, request
+from requests import get
 
 load_dotenv()
 redis = from_url(os.environ['REDIS_URI'])
+price_collector = os.environ['PRICE_COLLECTOR_URI']
 
 point_count = 720
 default_interval = 240
@@ -37,7 +39,7 @@ def get_using_pair() -> str:
 			return pair
 	return default_pair
 
-def get_prices(interval, pair):
+def get_prices(interval: int, pair: str):
 	if not interval or not pair:
 		raise Exception('No Interval/Pair')
 
@@ -47,9 +49,10 @@ def get_prices(interval, pair):
 	if not is_supported_pair(pair):
 		raise Exception(f'Unsupported Pair: {pair}')
 
-	slicing_ratio = int(interval / price_collector_interval)
+	print(f'http://{price_collector}/prices/{pair.lower()}?interval={interval}')
+	price_api = get(f'http://{price_collector}/prices/{pair.lower()}?interval={interval}')
+	data = price_api.json()
 
-	prices = redis.lrange(f'{pair}:prices', 0, -1)[::slicing_ratio]
-	timestamps = redis.lrange(f'{pair}:timestamps', 0, -1)[::slicing_ratio]
+	prices, timestamps = zip(*(item.values() for item in data))
 
 	return np.array(prices).astype(float), np.array(timestamps).astype(int)
