@@ -39,7 +39,7 @@ def get_using_pair() -> str:
 			return pair
 	return default_pair
 
-def get_prices(interval: int, pair: str, before: int = None):
+def get_prices(interval: int, pair: str, at: int = None):
 	if not interval or not pair:
 		raise Exception('No Interval/Pair')
 
@@ -49,11 +49,10 @@ def get_prices(interval: int, pair: str, before: int = None):
 	if not is_supported_pair(pair):
 		raise Exception(f'Unsupported Pair: {pair}')
 
-	if type(before) != 'int' and before:
-		raise Exception(f'Unsupported before')
+	if type(at) != 'int' and at:
+		raise Exception(f'Unsupported at timestamp')
 
-	price_api_response = get(
-	  f'{price_collector_uri}/prices/{pair}?interval={interval}{f"&before={before}" if before else ""}')
+	price_api_response = get(f'{price_collector_uri}/prices/{pair}?interval={interval}{f"&at={at}" if at else ""}')
 	data = price_api_response.json()
 
 	prices, timestamps = zip(*(item.values() for item in data))
