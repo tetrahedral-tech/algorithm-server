@@ -1,4 +1,4 @@
-import jwt, os, io, numpy as np
+import jwt, os, io
 import matplotlib.pyplot as plt
 from pymongo.server_api import ServerApi
 from pymongo import MongoClient

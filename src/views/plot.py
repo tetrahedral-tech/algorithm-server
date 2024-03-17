@@ -1,9 +1,8 @@
 from price import get_prices, get_using_pair, get_using_interval
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-import numpy as np
 from importlib import import_module
-from utils import get_algorithms, svg_plot, timestamps_range
+from utils import get_algorithms, svg_plot
 from plots.styling import style_plots
 from mpld3 import fig_to_html
 from flask import request
