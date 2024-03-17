@@ -49,7 +49,7 @@ def get_prices(interval: int, pair: str, at: int = None):
 	if not is_supported_pair(pair):
 		raise Exception(f'Unsupported Pair: {pair}')
 
-	if type(at) != 'int' and at:
+	if type(at) != int and at:
 		raise Exception(f'Unsupported at timestamp')
 
 	price_api_response = get(f'{price_collector_uri}/prices/{pair}?interval={interval}{f"&at={at}" if at else ""}')
