@@ -16,12 +16,13 @@ def plot(algorithm_name: str):
 	interval = get_using_interval()
 	pair = get_using_pair()
 	interactive = request.args.get('interactive', type=bool, default=False)
+	before = request.args.get('before', type=int, default=None)
 
 	if algorithm_name not in ['price', *get_algorithms()]:
 		return 'Unsupported Algorithm', 404
 
 	try:
-		prices, timestamps = get_prices(interval, pair)
+		prices, timestamps = get_prices(interval, pair, before)
 		timestamps = timestamps.astype('datetime64[s]')
 	except Exception as error:
 		return str(error)
