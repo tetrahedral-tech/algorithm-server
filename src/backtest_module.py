@@ -43,7 +43,7 @@ def backtest(algorithm: str,
 			  'strength': strength,
 			  'current_balance': balance,
 			  'current_shares': shares,
-			  'timestamp': timestamps[index - 1]
+			  'timestamp': int(timestamps[index - 1])
 			})
 
 	return {
