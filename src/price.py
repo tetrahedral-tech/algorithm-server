@@ -12,7 +12,7 @@ price_collector_uri = os.environ['PRICE_COLLECTOR_URI']
 point_count = 720
 default_interval = 240
 price_collector_interval = 5
-supported_intervals = [5, 15, 30, 60, 240, 1440, 10080]
+supported_intervals = [5, 15, 30, 60, 240, 1440]
 
 default_pair = 'USDC-WETH'
 supported_pairs = ['USDC-WETH']
