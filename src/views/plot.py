@@ -1,9 +1,8 @@
 from price import get_prices, get_using_pair, get_using_interval
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-import numpy as np
 from importlib import import_module
-from utils import get_algorithms, svg_plot, timestamps_range
+from utils import get_algorithms, svg_plot
 from plots.styling import style_plots
 from mpld3 import fig_to_html
 from flask import request
@@ -17,24 +16,16 @@ def plot(algorithm_name: str):
 	interval = get_using_interval()
 	pair = get_using_pair()
 	interactive = request.args.get('interactive', type=bool, default=False)
+	at = request.args.get('at', type=int, default=None)
 
 	if algorithm_name not in ['price', *get_algorithms()]:
 		return 'Unsupported Algorithm', 404
 
-	from_time = int(request.args.get('from') or False)
-	to_time = int(request.args.get('to') or -1)
-
 	try:
-		prices, timestamps = get_prices(interval, pair)
-		if from_time:
-			prices, timestamps = timestamps_range(from_time, to_time, prices, timestamps)
+		prices, timestamps = get_prices(interval, pair, at)
+		timestamps = timestamps.astype('datetime64[s]')
 	except Exception as error:
 		return str(error)
-
-	# Even out timestamps so plotting algos works
-	timestamps = timestamps.astype('datetime64[s]')
-	interval_timedelta = np.timedelta64(interval, 'm')
-	timestamps = np.arange(timestamps[-1] - interval_timedelta * timestamps.shape[0], timestamps[-1], interval_timedelta)
 
 	figure = plt.figure()
 

@@ -3,14 +3,16 @@ import numpy as np
 from redis import from_url
 from dotenv import load_dotenv
 from flask import has_request_context, request
+from requests import get
 
 load_dotenv()
 redis = from_url(os.environ['REDIS_URI'])
+price_collector_uri = os.environ['PRICE_COLLECTOR_URI']
 
 point_count = 720
 default_interval = 240
 price_collector_interval = 5
-supported_intervals = [5, 15, 30, 60, 240, 1440, 10080]
+supported_intervals = [5, 15, 30, 60, 240, 1440]
 
 default_pair = 'USDC-WETH'
 supported_pairs = ['USDC-WETH']
@@ -37,7 +39,7 @@ def get_using_pair() -> str:
 			return pair
 	return default_pair
 
-def get_prices(interval, pair):
+def get_prices(interval: int, pair: str, at: int = None):
 	if not interval or not pair:
 		raise Exception('No Interval/Pair')
 
@@ -47,9 +49,12 @@ def get_prices(interval, pair):
 	if not is_supported_pair(pair):
 		raise Exception(f'Unsupported Pair: {pair}')
 
-	slicing_ratio = int(interval / price_collector_interval)
+	if type(at) != int and at:
+		raise Exception(f'Unsupported at timestamp')
 
-	prices = redis.lrange(f'{pair}:prices', 0, -1)[::slicing_ratio]
-	timestamps = redis.lrange(f'{pair}:timestamps', 0, -1)[::slicing_ratio]
+	price_api_response = get(f'{price_collector_uri}/prices/{pair}?interval={interval}{f"&at={at}" if at else ""}')
+	data = price_api_response.json()
+
+	prices, timestamps = zip(*(item.values() for item in data))
 
 	return np.array(prices).astype(float), np.array(timestamps).astype(int)
