@@ -1,4 +1,4 @@
-import jwt, os, io, numpy as np
+import jwt, os, io
 import matplotlib.pyplot as plt
 from pymongo.server_api import ServerApi
 from pymongo import MongoClient
@@ -35,20 +35,3 @@ def svg_plot() -> str:
 	svg_buffer.close()
 
 	return plot_data
-
-def timestamps_range(from_time: int, to_time: int, prices: list, timestamps: list) -> tuple[list, list]:
-	if from_time not in list(timestamps):
-		raise Exception('INCORRECT TIMESTAMPS.')
-
-	from_index = int(np.where(timestamps == from_time)[0][0])
-	if to_time != -1:
-		if to_time not in list(timestamps):
-			raise Exception('INCORRECT TIMESTAMPS.')
-
-		if from_time > to_time:
-			raise Exception('INCORRECT INPUT.')
-
-		to_index = int(np.where(timestamps == to_time)[0][0])
-		return prices[from_index:to_index], timestamps[from_index:to_index]
-
-	return prices[from_index:to_time], timestamps[from_index:to_time]
