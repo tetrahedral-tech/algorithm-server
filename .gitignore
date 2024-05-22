@@ -161,3 +161,6 @@ cython_debug/
 
 #redis
 dump.rdb
+
+# algorithm server environment
+algorithm-server-env/
