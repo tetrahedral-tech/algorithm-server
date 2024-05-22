@@ -34,10 +34,10 @@ The trading logic is implemented in a Flask web application that serves as an AP
 ### Prerequisites
 - You should install TA-Lib python library before creating the virtual environment since its essential, this video is simple how to install : https://www.youtube.com/watch?v=AQFZMvYp2KA
 - Configure the environemnt and install required Python packages (on linux/unix): 
---`pip install virtualenv`
---`virtualenv algorithm-server-env`
---`source venv/bin/activate`
---`pip install -r requirements.txt`
+- Install virtual env if you don't have it installed already: `pip install virtualenv`
+- Initialize the virual env named "algorithm-server-env": `virtualenv algorithm-server-env`
+- Activate the virtual env: `source venv/bin/activate`
+- Install the requirements: `pip install -r requirements.txt`
 
 - Install redis using: `sudo apt-get update && sudo apt-get install redis `
 
